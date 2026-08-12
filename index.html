@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شرح شيتات ME323 — Engineering Design | بالعربي للامتحان</title>
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-sans-arabic@latest/arabic-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-sans-arabic@latest/arabic-500-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-sans-arabic@latest/arabic-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-mono@latest/latin-600-normal.css" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b2540; --navy2:#123a63; --ink:#1c2b3a; --muted:#5b6b7c;
+  --teal:#0d9488; --teal-dark:#0f766e; --amber:#f59e0b; --amber-bg:#fff8e6;
+  --green:#16a34a; --green-bg:#ecfdf3; --red:#dc2626;
+  --bg:#f2f5f9; --card:#ffffff; --line:#e3e9f0;
+  --radius:16px; --shadow:0 2px 10px rgba(11,37,64,.06),0 10px 30px rgba(11,37,64,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:2;font-size:16.5px}
+::selection{background:#bfe8e2}
+
+/* ===== Header ===== */
+header{position:sticky;top:0;z-index:60;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#0f4d5e 100%);color:#fff;box-shadow:0 4px 18px rgba(11,37,64,.35)}
+.hwrap{max-width:1400px;margin:auto;padding:14px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid rgba(255,255,255,.2)}
+.htitle h1{font-size:19px;font-weight:700;line-height:1.4}
+.htitle p{font-size:12.5px;opacity:.82;line-height:1.5}
+.hprogress{margin-inline-start:auto;min-width:210px}
+.hprogress .lbl{font-size:11.5px;opacity:.85;display:flex;justify-content:space-between;margin-bottom:4px}
+.pbar{height:8px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
+.pbar>div{height:100%;width:0%;background:linear-gradient(90deg,#2dd4bf,#a3e635);border-radius:99px;transition:width .5s ease}
+#burger{display:none;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:10px;padding:8px 14px;font-family:inherit;font-size:14px;cursor:pointer}
+
+/* ===== Layout ===== */
+.layout{max-width:1400px;margin:auto;display:grid;grid-template-columns:300px 1fr;gap:26px;padding:26px 22px 90px;align-items:start}
+
+/* ===== Sidebar ===== */
+nav.side{position:sticky;top:96px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;max-height:calc(100vh - 120px);overflow:auto}
+.searchbox{position:relative;margin-bottom:14px}
+.searchbox input{width:100%;padding:10px 38px 10px 12px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13.5px;background:#fafcfe;color:var(--ink)}
+.searchbox input:focus{outline:none;border-color:var(--teal)}
+.searchbox .ic{position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:.5}
+.unit-tag{font-size:12px;font-weight:700;color:#fff;background:var(--navy);border-radius:8px;padding:4px 10px;margin:14px 0 8px;display:inline-block}
+.unit-tag.u2{background:var(--teal-dark)}
+nav.side a{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;color:var(--muted);text-decoration:none;font-size:13.5px;transition:.18s;border:1px solid transparent}
+nav.side a:hover{background:#f0f6f4;color:var(--teal-dark)}
+nav.side a.active{background:#e6f5f2;color:var(--teal-dark);font-weight:700;border-color:#cbe9e2}
+nav.side a .dot{width:7px;height:7px;border-radius:50%;background:#cfd9e3;flex:none;transition:.2s}
+nav.side a.done .dot{background:var(--green)}
+nav.side a .en-mini{font-family:'IBM Plex Mono',monospace;direction:ltr;font-size:12px}
+
+/* ===== Main ===== */
+main{min-width:0}
+.intro-card{background:linear-gradient(135deg,#fff 0%,#f4fbf9 100%);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 28px;margin-bottom:28px}
+.intro-card h2{color:var(--navy);font-size:22px;margin-bottom:8px}
+.intro-card p{color:var(--muted);font-size:15px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:12.5px;background:#eef4f9;border:1px solid var(--line);padding:4px 12px;border-radius:99px;color:var(--navy)}
+
+.unit-header{display:flex;align-items:center;gap:14px;margin:44px 0 20px;scroll-margin-top:110px}
+.unit-header .num{width:52px;height:52px;border-radius:14px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;flex:none;box-shadow:var(--shadow)}
+.unit-header.u2 .num{background:var(--teal-dark)}
+.unit-header h2{font-size:24px;color:var(--navy)}
+.unit-header small{display:block;font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:right;color:var(--muted);font-size:13px}
+
+/* lesson card */
+.lesson{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:24px;overflow:hidden;scroll-margin-top:110px;transition:opacity .3s}
+.lesson.hidden{display:none}
+.lesson-head{padding:20px 24px;display:flex;align-items:flex-start;gap:14px;border-bottom:1px dashed var(--line);background:linear-gradient(180deg,#fbfdfe,#fff)}
+.lesson-head .no{background:#eef4f9;color:var(--navy);font-family:'IBM Plex Mono',monospace;font-weight:600;border-radius:10px;padding:6px 12px;font-size:14px;flex:none;direction:ltr}
+.lesson-head h3{font-size:18.5px;color:var(--navy);line-height:1.6}
+.lesson-head .en-sub{font-family:'IBM Plex Mono',monospace;direction:ltr;display:block;font-size:12.5px;color:var(--teal-dark);margin-top:2px}
+.lesson-head .done-btn{margin-inline-start:auto;flex:none;background:#f4f7fa;border:1.5px solid var(--line);color:var(--muted);border-radius:99px;padding:6px 14px;font-family:inherit;font-size:12.5px;cursor:pointer;transition:.2s;white-space:nowrap}
+.lesson-head .done-btn:hover{border-color:var(--green);color:var(--green)}
+.lesson-head .done-btn.checked{background:var(--green-bg);border-color:var(--green);color:var(--green);font-weight:700}
+.lesson-body{padding:22px 26px 26px}
+.lesson-body p{margin-bottom:12px}
+.lesson-body h4{color:var(--teal-dark);font-size:16px;margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.lesson-body h4::before{content:'';width:5px;height:20px;background:linear-gradient(180deg,var(--teal),#a3e635);border-radius:99px;flex:none}
+ul.styled{list-style:none;margin:8px 0 14px}
+ul.styled li{padding:7px 0 7px 0;padding-inline-start:26px;position:relative;border-bottom:1px dashed #eef2f6}
+ul.styled li:last-child{border-bottom:none}
+ul.styled li::before{content:'◂';position:absolute;right:2px;color:var(--teal);font-size:12px;top:11px}
+ul.styled li b{color:var(--navy)}
+
+/* english term chip */
+.en{font-family:'IBM Plex Mono',monospace;direction:ltr;unicode-bidi:isolate;display:inline-block;background:#fff7e0;border:1px solid #f2d98c;color:#8a5b00;padding:0 7px;border-radius:6px;font-size:.86em;line-height:1.7;white-space:nowrap}
+.en.b{background:#e8f1fb;border-color:#bcd6ef;color:#134e7c;font-weight:600}
+
+/* formula */
+.formula{direction:ltr;text-align:center;font-family:'IBM Plex Mono',monospace;background:linear-gradient(135deg,var(--navy),#14406b);color:#eaf6ff;padding:14px 18px;border-radius:12px;margin:14px auto;font-size:17px;letter-spacing:.5px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),var(--shadow);overflow-x:auto;white-space:nowrap}
+.formula sub,.formula sup{font-size:.68em}
+.formula .hl{color:#7ee8d8;font-weight:600}
+.formula .cap{display:block;font-size:11px;color:#9fc1dd;margin-top:6px;font-family:'IBM Plex Sans Arabic';direction:rtl}
+
+/* boxes */
+.box{border-radius:12px;padding:14px 18px;margin:14px 0;font-size:15px;border:1px solid}
+.box .bt{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.box.exam{background:var(--green-bg);border-color:#b6e6c6}
+.box.exam .bt{color:var(--green)}
+.box.tip{background:var(--amber-bg);border-color:#f0dca0}
+.box.tip .bt{color:#b45309}
+.box.warn{background:#fef2f2;border-color:#fecaca}
+.box.warn .bt{color:var(--red)}
+.box.info{background:#eff6ff;border-color:#bfd7f5}
+.box.info .bt{color:#1d4ed8}
+
+/* grid cards */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:14px 0}
+.mini{background:#fafcfe;border:1px solid var(--line);border-radius:12px;padding:14px 16px;transition:.2s}
+.mini:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#cde5df}
+.mini h5{font-size:14.5px;color:var(--navy);margin-bottom:6px}
+.mini p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.9}
+
+/* collapsible */
+details.fold{border:1px solid var(--line);border-radius:12px;margin:12px 0;background:#fbfdfe;overflow:hidden}
+details.fold summary{cursor:pointer;padding:12px 18px;font-weight:700;color:var(--navy);font-size:15px;list-style:none;display:flex;align-items:center;gap:10px;user-select:none;transition:.2s}
+details.fold summary:hover{background:#f1f7f5}
+details.fold summary::after{content:'▾';margin-inline-start:auto;color:var(--teal);transition:transform .25s;font-size:13px}
+details.fold[open] summary::after{transform:rotate(180deg)}
+details.fold .fc{padding:4px 18px 16px;border-top:1px dashed var(--line)}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;direction:ltr;text-align:left}
+.tbl th{background:var(--navy);color:#fff;padding:9px 12px;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--line)}
+.tbl tr:nth-child(even) td{background:#f7fafc}
+.tbl td.ar{direction:rtl;text-align:right;font-family:'IBM Plex Sans Arabic'}
+
+/* steps */
+.steps{counter-reset:st;list-style:none;margin:10px 0}
+.steps li{position:relative;padding:8px 46px 8px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+
+/* summary final */
+.final{background:linear-gradient(135deg,var(--navy),#0f4d5e);color:#fff;border-radius:var(--radius);padding:30px;margin-top:40px;box-shadow:var(--shadow)}
+.final h2{font-size:22px;margin-bottom:6px}
+.final p.sub{opacity:.8;font-size:14px;margin-bottom:18px}
+.final .grid2 .mini{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15)}
+.final .mini h5{color:#7ee8d8}
+.final .mini p{color:#dbe7f2}
+
+#topBtn{position:fixed;bottom:26px;left:26px;width:48px;height:48px;border-radius:50%;background:var(--teal);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 8px 22px rgba(13,148,136,.45);opacity:0;pointer-events:none;transition:.3s;z-index:70}
+#topBtn.show{opacity:1;pointer-events:auto}
+#noResult{display:none;text-align:center;color:var(--muted);padding:40px;font-size:15px}
+
+@media(max-width:960px){
+  .layout{grid-template-columns:1fr;padding:16px 14px 80px}
+  #burger{display:block}
+  nav.side{position:fixed;top:0;right:-320px;width:290px;height:100vh;max-height:none;z-index:80;border-radius:0;transition:right .3s ease;box-shadow:-8px 0 30px rgba(0,0,0,.2)}
+  nav.side.open{right:0}
+  .hprogress{width:100%;min-width:0}
+  .lesson-body{padding:18px 16px 22px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <button id="burger">☰ الفهرس</button>
+    <div class="logo">⚙️</div>
+    <div class="htitle">
+      <h1>شرح شيتات ME323 — Mechanical Engineering Design</h1>
+      <p>شرح تفصيلي بالعربي + المصطلحات والجمل الإنجليزية زي ما هي للامتحان · Dr. Mohamed Osman Abdalla</p>
+    </div>
+    <div class="hprogress">
+      <div class="lbl"><span>تقدّمك في المذاكرة</span><span id="pct">0%</span></div>
+      <div class="pbar"><div id="pfill"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- ===================== SIDEBAR ===================== -->
+<nav class="side" id="sidebar">
+  <div class="searchbox">
+    <span class="ic">🔍</span>
+    <input type="text" id="search" placeholder="ابحث في الشرح...">
+  </div>
+  <span class="unit-tag">Lecture 1 · Introduction</span>
+  <a href="#lec-intro" data-sec="lec-intro"><span class="dot"></span><span class="en-mini">Code of Ethics</span></a>
+  <a href="#lec-design" data-sec="lec-design"><span class="dot"></span><span class="en-mini">Engineering & Machine Design</span></a>
+  <a href="#lec-process" data-sec="lec-process"><span class="dot"></span><span class="en-mini">Traditional Design Process</span></a>
+  <a href="#lec-consid" data-sec="lec-consid"><span class="dot"></span><span class="en-mini">Design Considerations</span></a>
+  <a href="#lec-std" data-sec="lec-std"><span class="dot"></span><span class="en-mini">Standards & Codes</span></a>
+  <a href="#lec-econ" data-sec="lec-econ"><span class="dot"></span><span class="en-mini">Economics</span></a>
+  <a href="#lec-safety" data-sec="lec-safety"><span class="dot"></span><span class="en-mini">Safety & Reliability</span></a>
+  <a href="#lec-unc" data-sec="lec-unc"><span class="dot"></span><span class="en-mini">Uncertainty</span></a>
+
+  <span class="unit-tag u2">Unit 2 · Stresses & Strains</span>
+  <a href="#u2-basic" data-sec="u2-basic"><span class="dot"></span><span class="en-mini">Stress & Strain</span></a>
+  <a href="#u2-diagram" data-sec="u2-diagram"><span class="dot"></span><span class="en-mini">Stress–Strain Diagram</span></a>
+  <a href="#u2-elastic" data-sec="u2-elastic"><span class="dot"></span><span class="en-mini">Elastic Relationships</span></a>
+  <a href="#u2-comp" data-sec="u2-comp"><span class="dot"></span><span class="en-mini">Compression & Torsion</span></a>
+  <a href="#u2-cart" data-sec="u2-cart"><span class="dot"></span><span class="en-mini">Cartesian Stress Components</span></a>
+  <a href="#u2-plane" data-sec="u2-plane"><span class="dot"></span><span class="en-mini">Plane Stress & Plane Strain</span></a>
+  <a href="#u2-mohr" data-sec="u2-mohr"><span class="dot"></span><span class="en-mini">Mohr's Circle & Principal Stresses</span></a>
+  <a href="#u2-conc" data-sec="u2-conc"><span class="dot"></span><span class="en-mini">Stress Concentration</span></a>
+  <a href="#u2-cyl" data-sec="u2-cyl"><span class="dot"></span><span class="en-mini">Pressurized Cylinders</span></a>
+  <a href="#u2-beam" data-sec="u2-beam"><span class="dot"></span><span class="en-mini">Beams in Bending</span></a>
+  <a href="#u2-fail" data-sec="u2-fail"><span class="dot"></span><span class="en-mini">Static Failure Theories</span></a>
+  <a href="#u2-exam" data-sec="u2-exam"><span class="dot"></span><span class="en-mini">Exam Solved Problems</span></a>
+</nav>
+
+<!-- ===================== MAIN ===================== -->
+<main>
+
+<div class="intro-card">
+  <h2>📖 إزاي تذاكر من الصفحة دي؟</h2>
+  <p>الشرح كله بالعربي بالتفصيل، وكل <b>مصطلح أو جملة إنجليزية</b> جاية زي ما هي في الشيت داخل صندوق <span class="en">كده</span> — عشان لما تكتب في الامتحان تكتبها صح. علّم على كل درس خلّصته من زر «✓ خلّصته» وتابع نسبة إنجازك من الشريط فوق. المعادلات المهمة في كروت غامقة — احفظها حرفياً.</p>
+  <div class="chips">
+    <span class="chip">🧾 Lecture 1: Introduction</span>
+    <span class="chip">🧮 Unit 2: Stresses and Strains</span>
+    <span class="chip">✍️ مسائل محلولة</span>
+    <span class="chip">🎯 نصائح امتحان</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<div class="unit-header" id="lec-start">
+  <div class="num">01</div>
+  <div><h2>المحاضرة الأولى: المقدمة</h2><small>Lecture 1: Introduction — ME323 Engineering Design</small></div>
+</div>
+
+<!-- ===== 1 Ethics ===== -->
+<section class="lesson" id="lec-intro" data-title="code of ethics engineers ميثاق اخلاقيات المهنة">
+  <div class="lesson-head">
+    <span class="no">1.1</span>
+    <h3>ميثاق أخلاقيات المهنة للمهندسين <span class="en-sub">Code of Ethics for Engineers (ASME)</span></h3>
+    <button class="done-btn" data-lesson="lec-intro">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>الشيت بيبدأ بحاجة مش حسابية بس بتيجي في الامتحان نظري: <b>أخلاقيات مهنة الهندسة</b> حسب الجمعية الأمريكية للمهندسين الميكانيكيين <span class="en b">The American Society of Mechanical Engineers (ASME)</span>. الفكرة إن المهندس مش بس بيحسب — عليه مسؤوليات تجاه الناس والمهنة.</p>
+
+    <h4>أولاً: المبادئ الأساسية — Fundamental Principles</h4>
+    <p>النص الإنجليزي محفوظ: المهندسون يدعمون ويطوّرون نزاهة وشرف وكرامة المهنة <span class="en">Engineers uphold and advance the integrity, honor, and dignity of the Engineering profession</span> وذلك عن طريق ثلاث نقاط:</p>
+    <ul class="styled">
+      <li><b>استخدام المعرفة والمهارة لرفاهية الإنسان:</b> <span class="en">using their knowledge and skill for the enhancement of human welfare</span> — يعني العلم اللي اتعلمته هدفه خدمة الناس مش الضرر.</li>
+      <li><b>الصدق وعدم التحيز، وخدمة الجمهور وأصحاب العمل والعملاء بأمانة:</b> <span class="en">being honest and impartial, and serving with fidelity the public, their employers and clients</span>.</li>
+      <li><b>السعي لرفع كفاءة ومكانة المهنة:</b> <span class="en">striving to increase the competence and prestige of the engineering profession</span>.</li>
+    </ul>
+
+    <h4>ثانياً: الشرائع الأساسية — Fundamental Canons</h4>
+    <p>دي 7 قواعد مباشرة، لو جالك سؤال «اذكر الـ Canons» اكتبها بالنقاط دي:</p>
+    <ul class="styled">
+      <li><span class="en">Engineers shall hold paramount the safety, health and welfare of the public</span><br>سلامة وصحة ورفاهية الجمهور هي <b>الأولوية القصوى</b> — دي أهم نقطة فيهم كلها وكلمة <span class="en">paramount</span> هي كلمة الامتحان.</li>
+      <li><span class="en">Engineers shall perform services only in the areas of their competence</span><br>لا تشتغل إلا في مجال تخصصك.</li>
+      <li><span class="en">Engineers shall continue their professional development throughout their careers</span><br>التطوير المهني مستمر طوال الحياة المهنية، وكمان توفّر فرص تطوير للي تحت إشرافك.</li>
+      <li><span class="en">Engineers shall act ... as faithful agents or trustees, and shall avoid conflicts of interest</span><br>تتصرف كوكيل أو أمين مخلص لصاحب العمل/العميل، وتتجنب <b>تضارب المصالح</b>.</li>
+      <li><span class="en">Engineers shall build their professional reputations on the merit of their services and shall not compete unfairly with others</span><br>السمعة تُبنى على جودة الخدمة، وممنوع المنافسة غير العادلة.</li>
+      <li><span class="en">Engineers shall associate only with reputable persons or organizations</span><br>لا ترتبط إلا بأشخاص أو جهات ذات سمعة طيبة.</li>
+      <li><span class="en">Engineers shall issue public statements only in an objective and truthful manner</span><br>أي تصريح علني يكون بموضوعية وصدق فقط.</li>
+    </ul>
+    <div class="box exam"><div class="bt">🎯 للامتحان</div>لو السؤال «What is the most important canon?» الإجابة: <b>safety, health and welfare of the public is paramount</b> — سلامة الجمهور فوق كل اعتبار.</div>
+  </div>
+</section>
+
+<!-- ===== 2 Eng Design ===== -->
+<section class="lesson" id="lec-design" data-title="engineering design machine design synthesis analysis">
+  <div class="lesson-head">
+    <span class="no">1.2</span>
+    <h3>التصميم الهندسي وتصميم الآلات <span class="en-sub">Engineering Design & Machine Design</span></h3>
+    <button class="done-btn" data-lesson="lec-design">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <h4>تعريف التصميم الهندسي — Engineering Design</h4>
+    <p>الجملة المحفوظة: التصميم الهندسي إما أن يكون <b>صياغة خطة لتلبية حاجة محددة</b> أو <b>حل مشكلة معينة</b>: <span class="en">Engineering Design is either to formulate a plan for the satisfaction of a specified need or to solve a specific problem</span>.</p>
+
+    <h4>الهدف الأساسي من تصميم الآلات</h4>
+    <p>دي نقطة محورية ومحبوبة في الامتحان: الهدف الأساسي هو <b>التصنيع/الابتكار</b> <span class="en b">Synthesis</span> وليس التحليل <span class="en b">Analysis</span>:</p>
+    <ul class="styled">
+      <li><span class="en">The primary objective of machine design is synthesis, or creation, not analysis</span> — الـ Synthesis هو إنشاء وتصوّر الآلية <span class="en">creative conception of mechanisms</span>.</li>
+      <li><span class="en">Analysis is a tool that serves as a means toward an end</span> — التحليل مجرد <b>أداة</b> توصلك للهدف، مش هو الهدف نفسه.</li>
+      <li>التصنيع ده يشمل التحسين <span class="en">Optimization</span> من ثلاث نواحي لازم تذكرهم مع بعض: <span class="en">performance, reliability and cost</span> (الأداء، الاعتمادية، التكلفة).</li>
+    </ul>
+    <p>الشيت ضرب مثال بـ <span class="en">Finite element model of a pickup truck floor pan assembly</span> — نموذج عناصر محدودة لأرضية صندوق سيارة بيك أب، وده مثال على أداة تحليل تخدم عملية التصميم.</p>
+
+    <h4>تعريف تصميم الآلات — Machine Design</h4>
+    <p><span class="en">Machine Design is the designing of the most commonly used parts, elements and units of various machines</span> — يعني تصميم الأجزاء والعناصر والوحدات الأكثر استخداماً في الآلات المختلفة (زي <span class="en">shafts</span> الأعمدة، <span class="en">gears</span> التروس، <span class="en">belts</span> السيور، <span class="en">fasteners</span> المرابط).</p>
+    <p><b>ماذا يفعل مهندس تصميم الآلات؟</b> ثلاث مهام بالترتيب:</p>
+    <ol class="steps">
+      <li><b>اختيار المواد المناسبة وأنسب الأشكال:</b> <span class="en">Selects proper materials and best suited shapes</span>.</li>
+      <li><b>حساب الأبعاد</b> بناءً على الأحمال الواقعة على الآلة وقوة/متانة المادة: <span class="en">Calculate the dimensions based on the loads on machines and strength of the material</span>.</li>
+      <li><b>تحديد عملية التصنيع</b> لتصنيع العنصر المصمَّم أو الآلة كاملة: <span class="en">Specifies the manufacturing process for the manufacture of the designed component of the machine or the whole machine</span>.</li>
+    </ol>
+    <div class="box tip"><div class="bt">💡 نقطة فهم</div>يعني شغل المهندس: <b>مادة → شكل → أبعاد → طريقة تصنيع</b>. لو جالك سؤال تعدادي، اكتب التلات خطوات دول زي ما هما بالإنجليزي.</div>
+  </div>
+</section>
+
+<!-- ===== 3 Design Process ===== -->
+<section class="lesson" id="lec-process" data-title="traditional design process preliminary intermediate detail">
+  <div class="lesson-head">
+    <span class="no">1.3</span>
+    <h3>عملية التصميم التقليدية ومراحلها الثلاث <span class="en-sub">The Traditional Design Process</span></h3>
+    <button class="done-btn" data-lesson="lec-process">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>أي منتج بيتصمم بيمر بثلاث مراحل متتابعة (مع احتمال تداخل بينها). الامتحان بيحب يجيب «قارن بين المراحل» أو «اذكر خطوات مرحلة كذا».</p>
+
+    <h4>المرحلة الأولى: التصميم الأولي — Preliminary Design Phase</h4>
+    <p>فيها بنتعامل مع <b>الآلة ككل</b> <span class="en">we deal with the entire machine</span>، وغالباً بتكون أول خطوة للمصمم وقد لا تتضمن تكراراً مكثفاً <span class="en">may not involve intense iteration</span>. خطواتها:</p>
+    <ul class="styled">
+      <li><span class="en">Define function</span> — تحديد الوظيفة المطلوبة.</li>
+      <li><span class="en">Identify constraints involving cost, size, etc.</span> — تحديد القيود (تكلفة، حجم…).</li>
+      <li><span class="en">Develop alternative conceptions of mechanism/process combinations that can satisfy the constraints</span> — تطوير تصورات بديلة لآليات تحقق القيود.</li>
+      <li><span class="en">Perform supporting analyses</span> — تحليلات مساندة: ديناميكا حرارية، انتقال حرارة، ميكانيكا موائع، حركة، قوى، إجهاد، عمر افتراضي، تكلفة… <span class="en">thermodynamic, heat transfer, fluid mechanics, kinematics, force, stress, life, cost</span>.</li>
+      <li><span class="en">Select the best mechanism</span> — اختيار أفضل آلية.</li>
+      <li><span class="en">Document the design</span> — توثيق التصميم.</li>
+    </ul>
+
+    <h4>المرحلة الثانية: التصميم المتوسط — Intermediate Design Phase</h4>
+    <p>بتيجي بعد الأولي وقد تتداخل معها. الفرق الجوهري: <b>هنا دائماً في تكرار</b> <span class="en">Intermediate design always involves iterations</span>، وبننتقل من الآلة ككل إلى <b>المكونات الفردية</b> <span class="en">individual components of the machine</span>. خطواتها:</p>
+    <ul class="styled">
+      <li><span class="en">Identify components</span> — تحديد المكونات.</li>
+      <li><span class="en">Define component functions</span> — تعريف وظيفة كل مكون.</li>
+      <li><span class="en">Identify constraints involving cost, size, etc.</span> — تحديد القيود.</li>
+      <li><span class="en">Develop tentative conceptions of the components ... using good form synthesis principles</span> — تصورات مبدئية باستخدام مبادئ جيدة للتشكيل.</li>
+      <li><span class="en">Perform supporting analyses (including analyses at each critical point in each component)</span> — تحليل عند <b>كل نقطة حرجة</b> في كل مكون.</li>
+      <li><span class="en">Select the best component designs</span> ثم <span class="en">Document component designs; prepare a layout drawing</span> — توثيق وإعداد <b>رسم تخطيطي</b>.</li>
+    </ul>
+
+    <h4>المرحلة الثالثة: التصميم التفصيلي — Detail Design Phase</h4>
+    <p>بتيجي بعد المتوسطة، وبنتعامل فيها مع المكونات الفردية والآلة ككل معاً. دي مرحلة «ورشة الإنتاج»:</p>
+    <ul class="styled">
+      <li><span class="en">Select manufacturing and assembly processes</span> — اختيار عمليات التصنيع والتجميع.</li>
+      <li><span class="en">Specify dimensions and tolerances</span> — تحديد الأبعاد و<b>السماحيات</b> (الـ tolerances كلمة مفتاحية).</li>
+      <li><span class="en">Prepare component detail drawings</span> — رسومات تفصيلية للمكونات.</li>
+      <li><span class="en">Prepare assembly drawings</span> — رسومات تجميع.</li>
+    </ul>
+
+    <table class="tbl">
+      <tr><th>Phase</th><th>Scope</th><th>Iteration?</th><th class="ar">التركيز</th></tr>
+      <tr><td>Preliminary</td><td>Entire machine</td><td>Not intense</td><td class="ar">الوظيفة واختيار الآلية</td></tr>
+      <tr><td>Intermediate</td><td>Individual components</td><td>Always</td><td class="ar">تحليل النقاط الحرجة</td></tr>
+      <tr><td>Detail</td><td>Components + whole machine</td><td>Finalizing</td><td class="ar">الأبعاد والسماحيات والرسومات</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 4 Considerations ===== -->
+<section class="lesson" id="lec-consid" data-title="design considerations strength cost">
+  <div class="lesson-head">
+    <span class="no">1.4</span>
+    <h3>اعتبارات التصميم <span class="en-sub">Design Considerations</span></h3>
+    <button class="done-btn" data-lesson="lec-consid">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p><b>التعريف:</b> أي متطلب يؤثر في التصميم يُسمّى «اعتبار تصميم»: <span class="en">If a requirement affects design, it is called a design consideration</span>.</p>
+    <p><b>مثال الشيت:</b> لو القدرة على حمل أحمال كبيرة دون فشل كانت مهمة، نقول إن <b>القوة</b> اعتبار تصميم: <span class="en">if the ability to carry large loads without failure is important, we say that strength is a design consideration</span>.</p>
+    <p>معظم مشاريع تطوير المنتجات تتضمن عدداً من الاعتبارات، احفظ منها مجموعة تقدر تعددها:</p>
+    <div class="grid2">
+      <div class="mini"><h5>ميكانيكية</h5><p><span class="en">Strength/stress · Distortion/stiffness · Wear · Friction · Fatigue life</span></p></div>
+      <div class="mini"><h5>اقتصادية وتسويقية</h5><p><span class="en">Cost · Marketability · Liability · Volume</span></p></div>
+      <div class="mini"><h5>حرارية وبيئية</h5><p><span class="en">Thermal properties · Corrosion · Lubrication · Noise</span></p></div>
+      <div class="mini"><h5>هندسية عامة</h5><p><span class="en">Weight · Size · Shape · Safety · Reliability · Maintenance · Usability/utility · Surface finish · Processing requirements · Aesthetic considerations · Scrapping/recyclability</span></p></div>
+    </div>
+    <div class="box exam"><div class="bt">🎯 للامتحان</div>سؤال التعداد: اكتب 8–10 اعتبارات بالإنجليزي مع ترجمتها. أهم 4 دايماً: <span class="en">Strength, Safety, Reliability, Cost</span>.</div>
+  </div>
+</section>
+
+<!-- ===== 5 Standards ===== -->
+<section class="lesson" id="lec-std" data-title="standards codes ASME">
+  <div class="lesson-head">
+    <span class="no">1.5</span>
+    <h3>المعايير والرموز <span class="en-sub">Standards and Codes</span></h3>
+    <button class="done-btn" data-lesson="lec-std">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>المقدمة: المعايير والرموز تمثل <b>نهجاً وصفياً/إلزامياً</b> في التصميم يمكن دمجه في عملية التصميم: <span class="en">Standards and codes represent a prescriptive approach to design that may be incorporated into a design process</span>.</p>
+    <div class="grid2">
+      <div class="mini">
+        <h5>Standard — معيار</h5>
+        <p><span class="en">A set of technical definitions and guidelines for designers and manufacturers</span><br>مجموعة تعريفات وإرشادات فنية للمصممين والمصنعين. يكتبها <b>خبراء</b> <span class="en">written by "experts"</span> وتُعتبر <b>طوعية</b> <span class="en">considered voluntary</span>.</p>
+      </div>
+      <div class="mini">
+        <h5>Code — رمز/كود</h5>
+        <p><span class="en">A set of standards that has been adopted by one or more governmental bodies or incorporated into a contract</span><br>معايير اعتمدتها جهة حكومية أو دُمجت في عقد. يعني: <span class="en">a code is a set of standards with the force of law behind it</span> — <b>له قوة القانون</b>.</p>
+      </div>
+    </div>
+    <div class="box tip"><div class="bt">💡 الفرق في جملة</div>الـ <b>Standard اختياري</b>، لكن الـ <b>Code إجباري</b> لأن وراه قوة القانون. دي جملة سؤال المقارنة الكلاسيكي.</div>
+
+    <h4>أمثلة من معايير ASME — لازم تعرف إن المنظمة هي ASME</h4>
+    <ul class="styled">
+      <li><span class="en">B1 Screw Threads</span> — القلاووظ (اللوالب).</li>
+      <li><span class="en">B5 Machine Tools</span> — أدوات وآلات التشغيل.</li>
+      <li><span class="en">B18 Standardization of Fasteners</span> — توحيد المرابط (مسامير وصواميل).</li>
+      <li><span class="en">B29 Chains, Attachments and Sprockets for Power Transmission</span> — السلاسل والتروس لنقل القدرة.</li>
+      <li><span class="en">B46 Classification and Designation of Surface Qualities</span> — تصنيف جودة الأسطح.</li>
+      <li><span class="en">Y14 Engineering Drawing and Related Documentation Practices</span> — الرسم الهندسي والتوثيق.</li>
+      <li><span class="en">MFC Measurement of Fluid Flow in Closed Conduits</span> — قياس سريان الموائع.</li>
+    </ul>
+    <details class="fold">
+      <summary>📜 أمثلة معايير القلاووظ ASME Standards for Screw Threads (للاطلاع)</summary>
+      <div class="fc">
+        <ul class="styled">
+          <li><span class="en">B1.1 Unified Inch Screw Threads (UN and UNR Thread Form)</span></li>
+          <li><span class="en">B1.5 Acme Screw Threads</span> — قلاووظ Acme.</li>
+          <li><span class="en">B1.13M Metric Screw Threads – M Profile</span></li>
+          <li><span class="en">B1.20.1 Pipe Threads, General Purpose (Inch)</span> — قلاووظ المواسير.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===== 6 Economics ===== -->
+<section class="lesson" id="lec-econ" data-title="economics cost breakeven">
+  <div class="lesson-head">
+    <span class="no">1.6</span>
+    <h3>الاقتصاديات في التصميم <span class="en-sub">Economics</span></h3>
+    <button class="done-btn" data-lesson="lec-econ">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>الجملة المفتاحية: <span class="en">Strength, safety, reliability, and cost are perhaps the most important design considerations</span> — والقاعدة العامة: <b>البديل الذي يحقق باقي الاعتبارات بأقل تكلفة هو المفضَّل</b>: <span class="en">the design alternative that satisfies other design considerations at the lowest costs is to be preferred</span>.</p>
+    <p><b>العوامل المؤثرة على «تكلفة» التصميم:</b> <span class="en">Issues affecting the "cost" of a design include</span>:</p>
+    <ul class="styled">
+      <li><span class="en">Product development costs</span> — تكاليف تطوير المنتج.</li>
+      <li><span class="en">Material choice</span> — اختيار المادة.</li>
+      <li><span class="en">Manufacturing processes involved</span> — عمليات التصنيع المستخدمة.</li>
+      <li><span class="en">Economies of scale</span> — اقتصاديات الحجم (الإنتاج الكبير يقلل تكلفة الوحدة).</li>
+      <li><span class="en">Tolerances specified</span> — السماحيات المحددة (كل ما كانت أضيق، التكلفة أعلى!).</li>
+      <li><span class="en">Use of standard sizes and components</span> — استخدام المقاسات والمكونات القياسية (يقلل التكلفة).</li>
+    </ul>
+    <p>الشيت بيوضح الفكرة بـ <b>نقطة التعادل</b> <span class="en">Breakeven point</span> بين عمليتين مختلفتين لتصنيع المسمار: عند عدد إنتاج معين تتساوى التكلفة، وبعدها تبقى العملية ذات التكلفة الثابتة العالية (لكن متغيرة أقل) هي الأرخص.</p>
+    <div class="box exam"><div class="bt">🎯 للامتحان</div>لو جالك «How to reduce cost?» اذكر: استخدام standard components + سماحيات معقولة + استغلال economies of scale.</div>
+  </div>
+</section>
+
+<!-- ===== 7 Safety ===== -->
+<section class="lesson" id="lec-safety" data-title="safety reliability strict liability">
+  <div class="lesson-head">
+    <span class="no">1.7</span>
+    <h3>السلامة والاعتمادية <span class="en-sub">Safety and Reliability</span></h3>
+    <button class="done-btn" data-lesson="lec-safety">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <ul class="styled">
+      <li><span class="en">Safety is paramount, most importantly because it is an ethical issue</span> — السلامة في المقام الأول لأنها <b>قضية أخلاقية</b> بالدرجة الأولى.</li>
+      <li><span class="en">Safety is also related to function. Safe designs tend to function well and perform reliably</span> — السلامة مرتبطة بالوظيفة؛ التصميم الآمن عادةً يعمل جيداً وباعتمادية.</li>
+    </ul>
+    <h4>مفهوم المسؤولية الصارمة — Strict Liability (مهم جداً)</h4>
+    <p>القانون الأمريكي يعترف بمفهوم <span class="en b">strict reliability</span>، ومعناه:</p>
+    <ul class="styled">
+      <li><b>المصنع مسؤول عن أي ضرر ناتج عن عيب في المنتج</b>، سواء كان العيب بسبب <b>خطأ تصميم</b> <span class="en">design flaw</span> أو <b>خطأ تصنيع</b> <span class="en">manufacturing error</span>.</li>
+      <li><b>لا يهم متى حدث الضرر</b> بعد التصنيع: <span class="en">It doesn't matter how long after manufacture the damage occurs</span>.</li>
+      <li><b>لا يلزم إثبات الإهمال:</b> <span class="en">Negligence does not have to be proven</span> — دي أهم جملة في القسم ده.</li>
+      <li>على المدعي فقط إثبات شيئين: <span class="en">A plaintiff only has to establish that the product was defective and that the defect caused damage or harm</span> — أن المنتج معيب، وأن العيب سبّب الضرر.</li>
+    </ul>
+    <div class="box warn"><div class="bt">⚠️ خد بالك</div>في الـ strict liability العبء على المدعي خفيف: مش مطلوب يثبت negligence — بس يثبت العيب والضرر وعلاقة السبب بينهما.</div>
+  </div>
+</section>
+
+<!-- ===== 8 Uncertainty ===== -->
+<section class="lesson" id="lec-unc" data-title="uncertainty sources scatter">
+  <div class="lesson-head">
+    <span class="no">1.8</span>
+    <h3>عدم اليقين — متأصل في التصميم الهندسي <span class="en-sub">Uncertainty – Inherent in Engineering Design</span></h3>
+    <button class="done-btn" data-lesson="lec-unc">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>ليه بنستخدم <b>معامل أمان</b> أصلاً؟ لأن في عدم يقين في كل حاجة بنحسبها. <b>مصادر عدم اليقين — Sources of Uncertainty:</b></p>
+    <ul class="styled">
+      <li><b>متغيرات عشوائية في معالجة المواد</b> تنتج توزيعات قوة تختلف من عينة لأخرى: <span class="en">Random variables associated with material processing result in strength distributions that vary from sample to sample</span> — بعض العينات أقوى من القيمة المحددة وأخرى (نتمنى قليلة) أقل منها.</li>
+      <li><b>التشتت الإحصائي في الأبعاد الحرجة</b> بسبب عيوب عمليات التصنيع في مرحلة التصميم التفصيلي: <span class="en">Statistical scatter in critical dimensions ... due to imperfections in manufacturing processes</span>.</li>
+      <li><b>التقريبات</b> المستخدمة في التعبيرات التحليلية لحسابات التصميم: <span class="en">Approximations used in the analytical expressions used to perform design calculations</span>.</li>
+      <li><b>عدم المعرفة الدقيقة بمقدار الأحمال الخارجية وتاريخها الزمني:</b> <span class="en">Inexact knowledge of the magnitude and time history of external loads</span>.</li>
+      <li><b>تأثير التآكل والاحتكاك (البلى) على المتانة:</b> <span class="en">Effect of corrosion and wear on strengths</span>.</li>
+    </ul>
+    <div class="box exam"><div class="bt">🎯 للامتحان</div>سؤال «List the sources of uncertainty in engineering design» → اكتب الخمس نقاط دول بالإنجليزي زي ما هما، مع ترجمة سطرية لكل واحدة.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<div class="unit-header u2" id="u2-start">
+  <div class="num">02</div>
+  <div><h2>الوحدة الثانية: الإجهادات والانفعالات</h2><small>Unit 2: Stresses and Strains — ME323</small></div>
+</div>
+
+<!-- ===== U2 1 basic ===== -->
+<section class="lesson" id="u2-basic" data-title="stress strain tensile test">
+  <div class="lesson-head">
+    <span class="no">2.1</span>
+    <h3>الإجهاد والانفعال — الأساس <span class="en-sub">Stress and Strain</span></h3>
+    <button class="done-btn" data-lesson="u2-basic">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>عشان نحصل على خواص المواد ومتانتها بنعمل <b>اختبار الشد</b> <span class="en b">Tensile Test</span>: العينة <span class="en">specimen</span> تتحمّل بقوة شد <span class="en">P</span> تزداد ببطء، ونسجّل <b>الحمل والإزاحة</b> <span class="en">Load and deflection are recorded</span>.</p>
+    <div class="formula">σ = P / A<sub>0</sub><span class="cap">الإجهاد الهندسي = الحمل ÷ مساحة المقطع الأصلية</span></div>
+    <p>حيث <span class="en">A₀</span> هي <b>المساحة الأصلية</b> للمقطع <span class="en">the original cross-sectional area</span>. لاحظ إننا بنحسب على المساحة الأصلية عشان كده اسمه <b>engineering stress</b>.</p>
+    <div class="formula">ε = (l − l<sub>0</sub>) / l<sub>0</sub><span class="cap">الانفعال الطبيعي = التغيّر في الطول ÷ الطول الأصلي</span></div>
+    <p>حيث <span class="en">l₀</span> الطول الأصلي للقياس <span class="en">original gauge length</span> و <span class="en">l</span> الطول الحالي المقابل للحمل الحالي.</p>
+    <div class="box tip"><div class="bt">💡 فهم سريع</div>الإجهاد <span class="en">Stress</span> = قوة لكل وحدة مساحة (N/mm² أو MPa)، والانفعال <span class="en">Strain</span> = نسبة تغيّر الطول (بدون وحدة — ده رقم لا بعدي).</div>
+  </div>
+</section>
+
+<!-- ===== U2 2 diagram ===== -->
+<section class="lesson" id="u2-diagram" data-title="stress strain diagram yield ultimate ductile brittle true">
+  <div class="lesson-head">
+    <span class="no">2.2</span>
+    <h3>منحنى الإجهاد والانفعال <span class="en-sub">Stress–Strain Diagram</span></h3>
+    <button class="done-btn" data-lesson="u2-diagram">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>بنرسم الإجهاد ضد الانفعال، والمنحنى ده بيدينا أهم نقاط المادة. احفظ الأربع نقاط دول بالإنجليزي:</p>
+    <ul class="styled">
+      <li><span class="en b">Proportional limit (pl)</span> — <b>حد التناسب:</b> لحد عنده العلاقة خطية <span class="en">linear relation</span> بين الإجهاد والانفعال.</li>
+      <li><span class="en b">Elastic limit (el)</span> — <b>حد المرونة:</b> قبله لا يوجد تشوه دائم <span class="en">No permanent deformation until the elastic limit</span>.</li>
+      <li><span class="en b">Yield strength, S<sub>y</sub></span> — <b>إجهاد الخضوع:</b> النقطة التي يبدأ عندها تشوه لدن ملحوظ، أو عندما يصل الانفعال الدائم إلى قيمة ثابتة عادةً <b>0.2%</b> من الطول الأصلي: <span class="en">where permanent set reaches a fixed amount, usually 0.2% of the original gauge length</span> — دي طريقة الـ offset الشهيرة.</li>
+      <li><span class="en b">Ultimate strength, S<sub>u</sub></span> — <b>مقاومة الشد القصوى:</b> أقصى إجهاد على المنحنى <span class="en">the maximum stress on the diagram</span>.</li>
+    </ul>
+    <h4>فرق مهم: مادة مطيلية مقابل مادة هشة</h4>
+    <div class="grid2">
+      <div class="mini"><h5>Ductile material (مطيلية)</h5><p>بتخضع بشكل واضح وتعمل <b>necking</b> (تخصّر) قبل الكسر، ومنحنى Sy واضح — زي الصلب الطري.</p></div>
+      <div class="mini"><h5>Brittle material (هشة)</h5><p>بتنكسر فجأة بدون خضوع ملحوظ — زي الحديد الزهر.</p></div>
+    </div>
+    <h4>الإجهاد الحقيقي مقابل الهندسي — True vs Engineering</h4>
+    <ul class="styled">
+      <li>المنحنى الهندسي <span class="en">Engineering stress-strain</span> (المستخدم عادةً) مبني على <b>المساحة الأصلية</b>.</li>
+      <li>المساحة فعلياً بتقل تحت الحمل خاصة أثناء الـ <span class="en">necking</span> بعد نقطة Ultimate.</li>
+      <li>الإجهاد الحقيقي <span class="en">True stress</span> مبني على <b>المساحة الفعلية</b> عند الحمل الحالي، والانفعال الحقيقي هو مجموع الزيادات الصغيرة مقسومة على طول القياس الحالي.</li>
+      <li><b>ملحوظة مهمة جداً:</b> <span class="en">true stress continually increases all the way to fracture</span> — الإجهاد الحقيقي يستمر في الزيادة حتى الكسر!</li>
+    </ul>
+    <div class="box exam"><div class="bt">🎯 للامتحان</div>سؤال محتمل: «Why does engineering stress decrease after Su while true stress keeps increasing?» → لأن الهندسي محسوب على المساحة الأصلية الثابتة، بينما الحقيقي محسوب على المساحة المتناقصة فعلياً أثناء الـ necking.</div>
+  </div>
+</section>
+
+<!-- ===== U2 3 elastic ===== -->
+<section class="lesson" id="u2-elastic" data-title="hooke young modulus poisson shear">
+  <div class="lesson-head">
+    <span class="no">2.3</span>
+    <h3>العلاقات المرنة: هوك، يونج، بواسون <span class="en-sub">Elastic Relationship of Stress and Strain</span></h3>
+    <button class="done-btn" data-lesson="u2-elastic">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>ميل الجزء الخطي من المنحنى هو <b>معامل المرونة أو معامل يونج</b> <span class="en b">Young's Modulus, or modulus of elasticity, E</span>، وهو ثابت نسبياً لنوع المادة الواحدة (صلب، نحاس، ألومنيوم).</p>
+    <div class="formula">σ = E · ε <span class="cap">قانون هوك في الشد/الضغط — Hooke's law</span></div>
+    <h4>نسبة بواسون — Poisson's ratio (ν)</h4>
+    <p>الشد في اتجاه بيحدث <b>انكماشاً سالباً</b> في الاتجاه العمودي عليه: <span class="en">Tension in one direction produces negative strain (contraction) in a perpendicular direction</span>. ثابت التناسب ده اسمه <span class="en b">Poisson's ratio, ν</span> وقيمه في الجداول <span class="en">Table A-5</span>.</p>
+    <p>لو عند إجهادات في الاتجاهات الثلاثة معاً <span class="en">σx, σy, σz</span>، الانفعال في كل اتجاه بيتأثر بالإجهاد فيه وبالإجهادات العمودية مضروبة في ν (علاقات هوك المعممة).</p>
+    <h4>قانون هوك للقص — Shear</h4>
+    <div class="formula">τ = G · γ<span class="cap">إجهاد القص = معامل الصلادة × انفعال القص</span></div>
+    <ul class="styled">
+      <li><span class="en">γ</span> هو <b>انفعال القص</b>: التغير في الزاوية القائمة لعنصر الإجهاد تحت قص خالص <span class="en">the change in a right angle of a stress element when subjected to pure shear stress</span>.</li>
+      <li><span class="en b">G</span> هو <b>معامل مرونة القص أو معامل الصلادة</b>: <span class="en">shear modulus of elasticity or modulus of rigidity</span>.</li>
+      <li>للمادة الخطية المتماثلة الخواص المتجانسة <span class="en">linear, isotropic, homogeneous material</span> العلاقة الشهيرة:</li>
+    </ul>
+    <div class="formula">G = E / 2(1 + ν)<span class="cap">علاقة تربط معاملات المرونة الثلاثة — احفظها!</span></div>
+    <div class="box info"><div class="bt">ℹ️ تعريفات سريعة</div><b>Isotropic</b> = نفس الخواص في كل الاتجاهات · <b>Homogeneous</b> = نفس الخواص في كل النقاط · <b>Linear</b> = يلتزم بقانون هوك.</div>
+  </div>
+</section>
+
+<!-- ===== U2 4 compression torsion ===== -->
+<section class="lesson" id="u2-comp" data-title="compression torsion shear modulus composites">
+  <div class="lesson-head">
+    <span class="no">2.4</span>
+    <h3>الضغط واللي والمواد المركبة <span class="en-sub">Compression, Torsion & Composites</span></h3>
+    <button class="done-btn" data-lesson="u2-comp">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <h4>مقاومة الضغط — Compression Strength</h4>
+    <ul class="styled">
+      <li>اختبارات الضغط بتدينا مقاومات الضغط <span class="en">compressive strengths</span>.</li>
+      <li>للمواد <b>المطيلية</b>: مقاومة الضغط تقريباً تساوي مقاومة الشد: <span class="en">S<sub>uc</sub> = S<sub>ut</sub></span>.</li>
+      <li>للمواد <b>الهشة</b>: مقاومة الضغط غالباً <b>أكبر</b> من مقاومة الشد: <span class="en">S<sub>uc</sub> &gt; S<sub>ut</sub></span> — عشان كده الزهر ممتاز في الضغط ضعيف في الشد.</li>
+    </ul>
+    <h4>اللي — Torsion</h4>
+    <ul class="styled">
+      <li>مقاومات اللي بنحصل عليها بلي قضبان أسطوانية مصمتة، والنتايج بتترسم في مخطط <b>العزم–زاوية اللي</b> <span class="en">torque-twist diagram</span>.</li>
+      <li>إجهادات القص في العينة <b>خطية مع نصف القطر</b>: صفر في المركز وأقصى قيمة عند السطح الخارجي: <span class="en">zero at the center and maximum at the outer radius</span>.</li>
+      <li>العلاقة بين أقصى إجهاد قص وزاوية اللي:</li>
+    </ul>
+    <div class="formula">τ = G · θ · r / l<sub>0</sub><span class="cap">θ: زاوية اللي بالراديان · r: نصف القطر · l₀: طول القياس · G: معامل الصلادة</span></div>
+    <h4>المواد المركبة — Composite Materials</h4>
+    <ul class="styled">
+      <li>بتتكوّن من مادتين مختلفتين أو أكثر، كل واحدة تساهم في الخواص النهائية، وتظل كل مادة <b>منفصلة</b> على المستوى الماكروسكوبي.</li>
+      <li>غالباً <span class="en">amorphous</span> (غير متبلورة) و <span class="en">non-isotropic</span> (خواصها تختلف حسب الاتجاه).</li>
+      <li>غالباً طبقات <span class="en">laminates</span> فيها <b>حشو</b> <span class="en">filler</span> يعطي الصلادة والقوة، و<b>مصفوفة</b> <span class="en">matrix</span> تمسك المادة ببعضها.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== U2 5 cartesian ===== -->
+<section class="lesson" id="u2-cart" data-title="cartesian stress components shear">
+  <div class="lesson-head">
+    <span class="no">2.5</span>
+    <h3>مركبات الإجهاد الديكارتية <span class="en-sub">Cartesian Stress Components</span></h3>
+    <button class="done-btn" data-lesson="u2-cart">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>لما نقسم جسم ونعزل سطح داخلي، القوة والعزم المحصلة بتظهر كتوزيع قوى على المساحة كلها. عند أي نقطة، التوزيع ده ليه مركبتان:</p>
+    <ul class="styled">
+      <li><b>إجهاد عمودي</b> <span class="en b">normal stress (σ)</span> — عمودي على السطح.</li>
+      <li><b>إجهاد قص مماسي</b> <span class="en b">tangential shear stress (τ)</span> — مماس للسطح.</li>
+    </ul>
+    <p>حالة الإجهاد عند نقطة بتتعرّف بـ <b>ثلاث مستويات متعامدة</b> <span class="en">three mutually orthogonal surfaces</span>، وكل سطح عليه إجهاد عمودي وإجهادات قص، وإجهاد القص غالباً بيحلل إلى مركبتين متعامدتين.</p>
+    <h4>نظام الترقيم — مهم جداً في الامتحان</h4>
+    <ul class="styled">
+      <li><b>المؤشر الأول</b> = اتجاه <b>عمودي السطح</b>: <span class="en">First subscript indicates direction of surface normal</span>.</li>
+      <li><b>المؤشر الثاني</b> = اتجاه <b>إجهاد القص</b>: <span class="en">Second subscript indicates direction of shear stress</span>.</li>
+      <li>مثال: <span class="en">τxy</span> = إجهاد قص واقع على سطح عموده في اتجاه x، واتجاه الإجهاد نفسه y.</li>
+    </ul>
+    <div class="formula">τ<sub>xy</sub> = τ<sub>yx</sub> , τ<sub>xz</sub> = τ<sub>zx</sub> , τ<sub>yz</sub> = τ<sub>zy</sub><span class="cap">القصات المتقاطعة متساوية — "cross shears" are equal</span></div>
+    <p>يعني عنصر الإجهاد العام فيه <b>6 مركبات مستقلة فقط</b>: <span class="en">σx, σy, σz, τxy, τxz, τyz</span>.</p>
+  </div>
+</section>
+
+<!-- ===== U2 6 plane ===== -->
+<section class="lesson" id="u2-plane" data-title="plane stress plane strain">
+  <div class="lesson-head">
+    <span class="no">2.6</span>
+    <h3>الإجهاد المستوي والانفعال المستوي <span class="en-sub">Plane Stress & Plane Strain</span></h3>
+    <button class="done-btn" data-lesson="u2-plane">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <div class="grid2">
+      <div class="mini">
+        <h5>Plane Stress — الإجهاد المستوي</h5>
+        <p>الإجهادات في اتجاه واحد (سمك رقيق) بتساوي صفر: <span class="en">σ<sub>z</sub> = τ<sub>xz</sub> = τ<sub>yz</sub> = 0</span>. مثال: الألواح الرقيقة. الباقي: <span class="en">σx, σy, τxy</span>.</p>
+      </div>
+      <div class="mini">
+        <h5>Plane Strain — الانفعال المستوي</h5>
+        <p><span class="en">If strains on one of the surfaces are zero, the condition is said to be plane strain condition</span> — لو الانفعالات في اتجاه معين = صفر (زي الأجسام الطويلة جداً). الانفعال εz = 0 لكن الإجهاد σz مش لازم يكون صفر.</p>
+      </div>
+    </div>
+    <div class="box tip"><div class="bt">💡 تفرقة سريعة</div>Plane Stress → الإجهادات المنعدمة (ألواح رقيقة) · Plane Strain → الانفعالات المنعدمة (أجسام طويلة/سميكة). الاتنين بيخلّوا المسألة ثنائية الأبعاد.</div>
+  </div>
+</section>
+
+<!-- ===== U2 7 Mohr ===== -->
+<section class="lesson" id="u2-mohr" data-title="mohr circle principal stresses transformation">
+  <div class="lesson-head">
+    <span class="no">2.7</span>
+    <h3>دائرة مور والإجهادات الرئيسية ⭐ <span class="en-sub">Mohr's Circle & Principal Stresses</span></h3>
+    <button class="done-btn" data-lesson="u2-mohr">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>ده قلب الوحدة الثانية وأهم جزء حسابي في الامتحان. <b>الفكرة:</b> لو قطعنا عنصر الإجهاد بمستوى مائل بزاوية <span class="en">φ</span>، الإجهادات على المستوى المائل ده (σ و τ) بتتغير حسب الزاوية، وبنحتاج نعرف قيمها القصوى.</p>
+
+    <h4>معادلات التحويل للإجهاد المستوي — Plane-Stress Transformation Equations</h4>
+    <div class="formula">σ = (σ<sub>x</sub>+σ<sub>y</sub>)/2 + (σ<sub>x</sub>−σ<sub>y</sub>)/2 · cos2φ + τ<sub>xy</sub> · sin2φ<span class="cap">الإجهاد العمودي على المستوى المائل</span></div>
+    <div class="formula">τ = − (σ<sub>x</sub>−σ<sub>y</sub>)/2 · sin2φ + τ<sub>xy</sub> · cos2φ<span class="cap">إجهاد القص على المستوى المائل</span></div>
+
+    <h4>الإجهادات الرئيسية — Principal Stresses</h4>
+    <p>باشتقاق معادلة σ بالنسبة لـ φ ومساواتها بالصفر بنلاقي زاويتين <span class="en">2φp</span> بتعطي أقصى وأدنى إجهاد عمودي. المستويات دي اسمها <b>الأسطح الرئيسية</b> و<b>إجهاد القص عليها = صفر</b>: <span class="en">The principal direction surfaces have zero shear stresses</span>.</p>
+    <div class="formula">σ<sub>1</sub>, σ<sub>2</sub> = (σ<sub>x</sub>+σ<sub>y</sub>)/2 ± √[ ((σ<sub>x</sub>−σ<sub>y</sub>)/2)² + τ<sub>xy</sub>² ]<span class="cap">الإجهادان الرئيسيان — احفظها حرفياً</span></div>
+    <div class="formula">tan 2φ<sub>p</sub> = 2τ<sub>xy</sub> / (σ<sub>x</sub>−σ<sub>y</sub>)<span class="cap">زاوية الأسطح الرئيسية</span></div>
+    <p>ملحوظة: في حالة الـ plane stress في <b>إجهاد رئيسي ثالث = صفر</b>: <span class="en">there is a third principal stress, equal to zero for plane stress</span>.</p>
+
+    <h4>أقصى إجهاد قص — Extreme-value Shear Stresses</h4>
+    <p>بنفس الطريقة مع معادلة τ بنلاقي إن أقصى قص بيحصل على أسطح مائلة بـ <b>±45° عن الأسطح الرئيسية</b>:</p>
+    <div class="formula">τ<sub>max(in-plane)</sub> = ± √[ ((σ<sub>x</sub>−σ<sub>y</sub>)/2)² + τ<sub>xy</sub>² ] = ± (σ<sub>1</sub>−σ<sub>2</sub>)/2<span class="cap">أقصى قص في المستوى = نصف قطر دائرة مور</span></div>
+    <div class="box warn"><div class="bt">⚠️ نقطة يقع فيها الطلبة</div><span class="en">Always three principal stresses, always three extreme-value shear stresses</span> — دايمماً في 3 إجهادات رئيسية و3 قيم قص قصوى. لو رتّبنا <span class="en">σ₁ ≥ σ₂ ≥ σ₃</span> فإن:
+    <div class="formula" style="margin-top:10px">τ<sub>max</sub> = (σ<sub>1</sub> − σ<sub>3</sub>) / 2<span class="cap">أقصى قص مطلقاً — وليس شرطاً تساوي قيمة in-plane!</span></div>
+    لو σ₁ و σ₂ لهما نفس الإشارة (الاتنين موجب أو الاتنين سالب)، معادلة in-plane مش هتديك الـ τmax الحقيقي!</div>
+
+    <h4>دائرة مور — Mohr's Circle Diagram</h4>
+    <p>طريقة <b>رسم بياني</b> لتمثيل حالة الإجهاد عند نقطة: <span class="en">A graphical method for visualizing the stress state at a point</span>. العلاقة بين σ و τ (باعتبار 2φ بارامتر) هي <b>دائرة</b>:</p>
+    <div class="formula">Center: C = ( (σ<sub>x</sub>+σ<sub>y</sub>)/2 , 0 ) &nbsp;&nbsp;|&nbsp;&nbsp; Radius: R = √[ ((σ<sub>x</sub>−σ<sub>y</sub>)/2)² + τ<sub>xy</sub>² ]<span class="cap">مركز ونصف قطر دائرة مور</span></div>
+    <ul class="styled">
+      <li>أطراف الدائرة على محور σ = قيم <span class="en">σ₁</span> و <span class="en">σ₂</span>.</li>
+      <li>نصف القطر R = أقصى قص.</li>
+      <li>الزاوية على الدائرة = <b>ضعف</b> الزاوية الفعلية (2φ).</li>
+    </ul>
+    <div class="box exam"><div class="bt">🎯 خطوات حل أي مسألة دائرة مور</div>
+    ① احسب المركز C = (σx+σy)/2 · ② احسب R · ③ σ₁ = C+R و σ₂ = C−R و σ₃ = 0 · ④ رتّب التلاتة ونزّل τmax = (σ₁−σ₃)/2 · ⑤ احسب tan2φp = 2τxy/(σx−σy).</div>
+  </div>
+</section>
+
+<!-- ===== U2 8 concentration ===== -->
+<section class="lesson" id="u2-conc" data-title="stress concentration kt discontinuity">
+  <div class="lesson-head">
+    <span class="no">2.8</span>
+    <h3>تركيز الإجهاد <span class="en-sub">Stress Concentration</span></h3>
+    <button class="done-btn" data-lesson="u2-conc">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>تقريباً أي مكون هندسي فيه <b>تغيّرات في المقطع</b> (ثقب، مجرى، كتف…). التغيّرات دي بتسبب <b>زيادة موضعية في الإجهاد</b> قرب مناطق عدم الانتظام <span class="en">localized increase of stress near discontinuities</span>، وشدتها تعتمد على شكل عدم الانتظام وطبيعة المادة.</p>
+    <div class="formula">K<sub>t</sub> = σ<sub>max</sub> / σ<sub>0</sub> &nbsp;&nbsp;,&nbsp;&nbsp; K<sub>ts</sub> = τ<sub>max</sub> / τ<sub>0</sub><span class="cap">معامل تركيز الإجهاد النظري/الهندسي — Theoretical (Geometric) Stress Concentration Factor</span></div>
+    <ul class="styled">
+      <li><span class="en b">K<sub>t</sub></span> = نسبة أقصى إجهاد فعلي عند عدم الانتظام إلى الإجهاد العمودي الاسمي.</li>
+      <li><span class="en b">K<sub>ts</sub></span> = نفس الكلام لإجهاد القص.</li>
+    </ul>
+    <h4>متى يجب اعتباره؟</h4>
+    <ul class="styled">
+      <li>المواد <b>الهشة</b> والحساسة للثلم <span class="en">brittle & notch sensitive materials</span>.</li>
+      <li>المواد عالية القوة، قليلة المطيلية، المقسّاة سطحياً، أو المشغّلة على البارد بكثافة: <span class="en">high-strength, low ductility, case-hardened and/or heavily cold work materials</span>.</li>
+    </ul>
+    <div class="box info"><div class="bt">ℹ️ حالة الاستاتيكي + المطيلي</div><span class="en">With static loads and ductile materials</span>: الألياف الأعلى إجهاداً بتخضع وتعمل cold working، والحمل يتوزع على الألياف التالية، فلا يتضرر الجزء إلا لو تجاوزنا Ultimate. لذلك: <span class="en">Stress concentration effect is commonly ignored for static loads on ductile materials</span> — غالباً يُهمل!</div>
+    <h4>تقنيات تقليل تركيز الإجهاد — Techniques to Reduce Stress Concentration</h4>
+    <ul class="styled">
+      <li><span class="en">Increase radius</span> — زيادة نصف قطر الاستدارة.</li>
+      <li><span class="en">Reduce disruption</span> — تقليل الانقطاع في المقطع.</li>
+      <li><span class="en">Allow "dead zones" to shape flowlines more gradually</span> — السماح بمناطق ميتة لتوجيه خطوط السريان تدريجياً.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== U2 9 cylinders ===== -->
+<section class="lesson" id="u2-cyl" data-title="pressurized cylinders thin walled vessels lamé">
+  <div class="lesson-head">
+    <span class="no">2.9</span>
+    <h3>الأسطوانات المضغوطة <span class="en-sub">Pressurized Cylinders & Thin-Walled Vessels</span></h3>
+    <button class="done-btn" data-lesson="u2-cyl">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>أسطوانة نصف قطرها الداخلي <span class="en">r<sub>i</sub></span> والخارجي <span class="en">r<sub>o</sub></span>، ضغط داخلي <span class="en">p<sub>i</sub></span> وخارجي <span class="en">p<sub>o</sub></span>. في إجهادان أساسيان: <b>مماسي</b> <span class="en">tangential σt</span> و<b>قطري</b> <span class="en">radial σr</span>، ولو الأطراف مقفولة في كمان <b>إجهاد طولي</b> <span class="en">longitudinal</span>.</p>
+    <h4>الحالة الخاصة: ضغط خارجي = صفر (po = 0)</h4>
+    <p>معادلات الأسطوانات سميكة الجدار (Lamé) — الإجهاد المماسي أقصى قيمة عند السطح الداخلي، والقطري يساوي −pi عند السطح الداخلي وصفر عند الخارجي.</p>
+    <h4>الأوعية رقيقة الجدار — Thin-Walled Vessels</h4>
+    <p><b>التعريف:</b> أسطوانة سمك جدارها <b>1/10 نصف قطرها أو أقل</b>: <span class="en">wall thickness 1/10 or less of the radius</span>. هنا الإجهاد القطري صغير جداً مقارنة بالمماسي، فنستخدم معادلات مبسطة:</p>
+    <div class="formula">σ<sub>t</sub> = p · r<sub>i</sub> / t &nbsp;&nbsp;(average tangential)<span class="cap">الإجهاد المماسي المتوسط</span></div>
+    <div class="formula">σ<sub>l</sub> = p · r<sub>i</sub> / 2t &nbsp;&nbsp;(if ends are closed)<span class="cap">الإجهاد الطولي لو الأطراف مقفولة — نص المماسي!</span></div>
+    <div class="box tip"><div class="bt">💡 قاعدة ذهبية</div>في الأوعية رقيقة الجدار: الإجهاد المماسي = <b>ضعف</b> الطولي (<span class="en">σt = 2σl</span>). عشان كده أي وعاء بينفجر بيفتح بشق <b>طولي</b> وليس عرضي!</div>
+    <details class="fold">
+      <summary>✍️ تمرين الشيت: وعاء ألومنيوم OD = 200 mm وسمك 6 mm والحد المسموح للمماسي 82 MPa</summary>
+      <div class="fc">
+        <p><b>(a) بطريقة الـ thin-walled:</b> القطر الداخلي = 200 − 2×6 = 188 mm → نصف القطر الداخلي ri = 94 mm.</p>
+        <div class="formula" dir="ltr">p = σ<sub>t</sub> · t / r<sub>i</sub> = 82 × 6 / 94 ≈ 5.23 MPa</div>
+        <p><b>(b) بنظرية الأسطوانات سميكة الجدار</b> (نفس الضغط 5.23 MPa):</p>
+        <div class="formula" dir="ltr">σ<sub>t,max</sub> = p<sub>i</sub>(r<sub>i</sub>²+r<sub>o</sub>²)/(r<sub>o</sub>²−r<sub>i</sub>²) ≈ 84.7 MPa &nbsp;|&nbsp; σ<sub>r</sub> = −p<sub>i</sub> ≈ −5.2 MPa &nbsp;|&nbsp; σ<sub>l</sub> ≈ 39.7 MPa</div>
+        <p>لاحظ الفرق: الحل المبسط ادى 82 MPa بينما الدقيق ادى 84.7 MPa — فرق بسيط لأن الجدار رقيق فعلاً (t/r ≈ 0.064 &lt; 0.1).</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===== U2 10 beams ===== -->
+<section class="lesson" id="u2-beam" data-title="beams bending section modulus">
+  <div class="lesson-head">
+    <span class="no">2.10</span>
+    <h3>الكمرات في الانحناء <span class="en-sub">Beams in Bending</span></h3>
+    <button class="done-btn" data-lesson="u2-beam">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>كمرة مستقيمة تحت انحناء موجب: <b>المحور x هو المحور المحايد</b> <span class="en">neutral axis</span>، والمستوى xz هو المستوى المحايد، والمحور المحايد <b>ينطبق على محور السنترود</b> للمقطع <span class="en">coincident with the centroid axis of the cross section</span>.</p>
+    <div class="formula">σ = M · y / I<span class="cap">معادلة الانحناء: الإجهاد يتغير خطياً مع البعد y عن المحور المحايد</span></div>
+    <ul class="styled">
+      <li><span class="en">M</span> = عزم الانحناء · <span class="en">I</span> = عزم القصور الذاتي للمساحة عن المحور z <span class="en">second-area moment</span> · <span class="en">y</span> = البعد عن المحور المحايد.</li>
+      <li>أقصى إجهاد عند أكبر قيمة لـ y، وبنسميها <span class="en">c</span>:</li>
+    </ul>
+    <div class="formula">σ<sub>max</sub> = M · c / I = M / Z &nbsp;&nbsp;,&nbsp;&nbsp; Z = I / c<span class="cap">Z = معامل المقطع — section modulus — احفظ العلاقتين</span></div>
+    <h4>افتراضات معادلة الانحناء — Assumptions (سؤال تعدادي شهير)</h4>
+    <ul class="styled">
+      <li><span class="en">Pure bending</span> — انحناء خالص (مع افتراض تأثير ضئيل للأحمال الأخرى).</li>
+      <li><span class="en">Material is isotropic and homogeneous</span> — المادة متجانسة ومتماثلة الخواص.</li>
+      <li><span class="en">Material obeys Hooke's law</span> — تلتزم بقانون هوك.</li>
+      <li><span class="en">Beam is initially straight with constant cross section</span> — الكمرة مستقيمة أصلاً ومقطعها ثابت.</li>
+      <li><span class="en">Beam has axis of symmetry in the plane of bending</span> — محور تناظر في مستوى الانحناء.</li>
+      <li>النسب الهندسية بحيث الفشل بالانحناء وليس بالانهيار أو التجعد أو الانبعاع الجانبي: <span class="en">failure is by bending rather than crushing, wrinkling, or sidewise buckling</span>.</li>
+      <li><span class="en">Plane cross sections remain plane during bending</span> — المقاطع المستوية تظل مستوية أثناء الانحناء.</li>
+    </ul>
+    <h4>معادلة الكمرة — Beam equation</h4>
+    <div class="formula">M / I = σ / c = E / R<span class="cap">M: العزم · I: عزم القصور · σ: الإجهاد · c: البعد عن المحور المحايد · R: نصف قطر التقوس · E: معامل المرونة</span></div>
+    <details class="fold">
+      <summary>✍️ تمرين الشيت: كمرة كابولية I-section تحمل موتور 1000 N على بُعد 400 mm والإجهاد المسموح 100 N/mm²</summary>
+      <div class="fc">
+        <p>العزم: <span class="en">M = 1000 × 400 = 400 000 N·mm</span>. المطلوب: <span class="en">Z = M/σ = 400 000/100 = 4000 mm³</span>.</p>
+        <p>بالمعطيات B = 4t و H = 6t بنحسب I للمقطع المطروح منه الفراغات: <span class="en">I = 56 t⁴</span> و <span class="en">c = 3t</span> ← <span class="en">Z = 56t⁴/3t = 18.67 t³</span>.</p>
+        <div class="formula" dir="ltr">18.67 t³ = 4000 → t³ ≈ 214.3 → t ≈ 5.98 ≈ 6 mm</div>
+        <p>النتيجة زي الشيت بالظبط: <span class="en">B = 4t = 24 mm , H = 6t = 36 mm , web/flange t = 6 mm</span>.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===== U2 11 failure theories ===== -->
+<section class="lesson" id="u2-fail" data-title="failure theories MSS von Mises distortion">
+  <div class="lesson-head">
+    <span class="no">2.11</span>
+    <h3>نظريات الفشل الاستاتيكي ⭐ <span class="en-sub">Static Failure Theories</span></h3>
+    <button class="done-btn" data-lesson="u2-fail">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p><b>ليه محتاجين نظريات فشل؟</b> اختبار الشد بيدينا <b>قوة واحدة</b> (Sy أو Su)، لكن في الواقع عنصر الإجهاد عليه <b>عدة إجهادات معاً</b> (multi-axial). السؤال: نقارن حالة الإجهاد المركبة دي بالقوة الواحدة إزاي؟ <span class="en">One strength, multiple stresses – How to compare stress state to single strength?</span></p>
+    <p>نظريات الفشل بتقترح طريقة للمقارنة بناءً على فرضية عن <b>أي جانب من حالة الإجهاد هو الحرج</b>.</p>
+
+    <h4>① نظرية أقصى إجهاد عمودي — Maximum Normal (Principal) Stress Theory</h4>
+    <ul class="styled">
+      <li>الفرضية: الخضوع يبدأ عندما يتجاوز أكبر إجهاد رئيسي إجهاد الخضوع: <span class="en">Yielding begins when the maximum principal stress in a stress element exceeds the yield strength</span>.</li>
+      <li>الطريقة: طلّع الـ principal stresses من دائرة مور وقارن أكبرهم بـ Sy.</li>
+      <li><b>الحكم:</b> البيانات التجريبية بتوضح إنها <b>غير آمنة في الربع الرابع</b> <span class="en">unsafe in the 4th quadrant</span>، و<b>لا يصح استخدامها للمواد المطيلية</b>: <span class="en">This theory is not safe to use for ductile materials</span>. (تصلح للهشة فقط).</li>
+    </ul>
+
+    <h4>② نظرية أقصى إجهاد قص — Maximum Shear Stress Theory (MSS)</h4>
+    <ul class="styled">
+      <li>الفرضية: الخضوع يبدأ لما أقصى قص في العنصر يتجاوز أقصى قص في عينة الشد لحظة الخضوع: <span class="en">Yielding begins when the maximum shear stress in a stress element exceeds the maximum shear stress in a tension test specimen ... when that specimen begins to yield</span>.</li>
+      <li>في عينة الشد أقصى قص = σ₁/2، وعند الخضوع (σ₁ = Sy) يبقى <span class="en">Sy/2</span>. يعني النظرية تتكتب: <span class="en">τmax &lt; Sy/2</span>.</li>
+    </ul>
+    <div class="formula">τ<sub>max</sub> = (σ<sub>1</sub> − σ<sub>3</sub>)/2 ≤ S<sub>y</sub>/2 &nbsp;→&nbsp; σ<sub>1</sub> − σ<sub>3</sub> ≤ S<sub>y</sub>/n<span class="cap">مع عامل التصميم n — ومعامل الأمان: n = Sy / (σ1 − σ3)</span></div>
+    <p><b>الحالات الثلاث</b> للإجهاد المستوي (مع σA ≥ σB):</p>
+    <table class="tbl">
+      <tr><th>Case</th><th>Condition</th><th>Failure criterion</th></tr>
+      <tr><td>1</td><td>σA ≥ σB ≥ 0</td><td>σA ≥ Sy</td></tr>
+      <tr><td>2</td><td>σA ≥ 0 ≥ σB</td><td>σA − σB ≥ Sy</td></tr>
+      <tr><td>3</td><td>0 ≥ σA ≥ σB</td><td>σB ≤ −Sy</td></tr>
+    </table>
+    <p><b>التقييم:</b> <span class="en">Conservative in all quadrants</span> — تحفظية في كل الأرباع، و<span class="en">Commonly used for design situations</span> — مستخدمة بكثرة في التصميم. شكل المنطقة الآمنة على المحاور الرئيسية = <b>سداسي</b>.</p>
+
+    <h4>③ نظرية طاقة التشوه — Distortion Energy (DE) Theory</h4>
+    <ul class="styled">
+      <li>أسماء تانية لازم تعرفها: <span class="en">Octahedral Shear Stress · Shear Energy · Von Mises · Von Mises–Hencky</span>.</li>
+      <li>الفكرة: المواد المطيلية تحت ضغط هيدروستاتيكي (إجهادات رئيسية متساوية) بتتحمل أكتر بكتير من المتوقع — يعني <b>تغير الحجم مش بيسبب خضوع، التشوه الزاوي هو السبب</b>.</li>
+      <li>طاقة الانفعال بتنقسم لطاقة تغير حجم + طاقة تشوه زاوي <span class="en">distortion energy</span>، والخضوع بيتأثر أساساً بطاقة التشوه.</li>
+      <li>الفرضية: <span class="en">Yielding occurs when the distortion strain energy per unit volume reaches the distortion strain energy per unit volume for yield in simple tension or compression of the same material</span>.</li>
+    </ul>
+    <h4>إجهاد فون ميسس — Von Mises Stress</h4>
+    <div class="formula">σ′ = √[ σ<sub>A</sub>² − σ<sub>A</sub>σ<sub>B</sub> + σ<sub>B</sub>² ] <span class="cap">للإجهاد المستوي — بالصيغتين التانية: σ′ = √[ σx² − σxσy + σy² + 3τxy² ]</span></div>
+    <ul class="styled">
+      <li>إجهاد فون ميسس = <b>إجهاد مكافئ/فعال واحد</b> يمثل حالة الإجهاد الكاملة: <span class="en">a single, equivalent, or effective stress for the entire general state of stress</span>.</li>
+      <li>النظرية ببساطة تقارنه بـ Sy مع عامل التصميم:</li>
+    </ul>
+    <div class="formula">σ′ ≤ S<sub>y</sub> / n &nbsp;→&nbsp; n = S<sub>y</sub> / σ′<span class="cap">معامل الأمان حسب نظرية DE</span></div>
+    <div class="box exam"><div class="bt">🎯 للامتحان — مقارنة سريعة</div>
+    <b>Max Normal Stress</b> → للهشة فقط، غير آمنة للمطيلية · <b>MSS</b> → تحفظية وآمنة دايماً، أسهل وأسهل في الحفظ · <b>DE (Von Mises)</b> → الأدق للمواد المطيلية وأقرب للنتائج التجريبية. لو السؤال «أي نظرية تستخدم؟» لمادة مطيلية → DE هي الإجابة النموذجية وMSS مقبولة.</div>
+  </div>
+</section>
+
+<!-- ===== U2 12 solved ===== -->
+<section class="lesson" id="u2-exam" data-title="solved problems exercises mohr pressure vessel beam">
+  <div class="lesson-head">
+    <span class="no">2.12</span>
+    <h3>مسائل الشيت المحلولة — تدريب الامتحان <span class="en-sub">Exercises from the Handouts</span></h3>
+    <button class="done-btn" data-lesson="u2-exam">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+
+    <h4>مسألة 1: دائرة مور (Exercise 1 من الشيت)</h4>
+    <p>نقطة في مادة مرنة عليها: <span class="en">σx = 50 N/mm² (tensile)</span> و <span class="en">σy = 30 N/mm² (compressive)</span> وقص <span class="en">τxy = 25 N/mm²</span>. المطلوب: الإجهادات الرئيسية ومستوياتها، وأقصى قص ومستواه.</p>
+    <ol class="steps">
+      <li>نرتب الإشارات: <span class="en">σx = +50 , σy = −30 , τxy = 25</span>.</li>
+      <li>مركز الدائرة: <span class="en">C = (50 − 30)/2 = 10 N/mm²</span>.</li>
+      <li>نصف القطر: <span class="en">R = √[((50+30)/2)² + 25²] = √(40² + 25²) = √2225 ≈ 47.17</span>.</li>
+      <li>الإجهادات الرئيسية: <span class="en">σ₁ = C + R ≈ 57.17</span> و <span class="en">σ₂ = C − R ≈ −37.17 N/mm²</span> (و σ₃ = 0).</li>
+      <li>زاوية المستويات الرئيسية: <span class="en">tan 2φp = 2×25/(50−(−30)) = 50/80 = 0.625</span> → <span class="en">2φp ≈ 32° → φp ≈ 16°</span>.</li>
+      <li>أقصى قص مطلقاً: <span class="en">τmax = (σ₁ − σ₃)/2 = (57.17 − (−37.17))/2 ≈ 47.17 N/mm²</span> على مستوى مائل 45° عن الرئيسي.</li>
+    </ol>
+    <div class="box exam"><div class="bt">🎯 إجابة نموذجية مختصرة</div><span class="en">σ₁ ≈ 57.2 MPa, σ₂ ≈ −37.2 MPa at φp ≈ 16° · τmax ≈ 47.2 MPa on ±45° from principal planes</span></div>
+
+    <h4>مسألة 2: وعاء الضغط</h4>
+    <p>محلولة بالتفصيل في قسم 2.9 — النتيجة: <span class="en">p ≈ 5.23 MPa</span> (thin-wall)، وبالحل الدقيق <span class="en">σt,max ≈ 84.7 MPa</span> و<span class="en">σl ≈ 39.7 MPa</span>.</p>
+
+    <h4>مسألة 3: كمرة الـ I-section</h4>
+    <p>محلولة في قسم 2.10 — النتيجة النهائية زي الشيت: <span class="en">t ≈ 6 mm → B = 24 mm, H = 36 mm</span>.</p>
+
+    <details class="fold">
+      <summary>🧪 اختبر نفسك سريعاً (اضغط لعرض الأسئلة)</summary>
+      <div class="fc">
+        <ul class="styled">
+          <li>What is the difference between a <b>Standard</b> and a <b>Code</b>?</li>
+          <li>List the three phases of the <b>Traditional Design Process</b> and the scope of each.</li>
+          <li>Define <b>Yield strength</b> using the 0.2% offset wording.</li>
+          <li>Why is <b>true stress</b> higher than engineering stress after necking?</li>
+          <li>Write <b>G</b> in terms of <b>E</b> and <b>ν</b>.</li>
+          <li>When can we <b>ignore stress concentration</b>?</li>
+          <li>Write the <b>thin-wall</b> formulas for σt and σl.</li>
+          <li>State the <b>DE theory</b> failure criterion with factor of safety.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===== FINAL SUMMARY ===== -->
+<div class="final" id="u2-exam-final">
+  <h2>📌 الملخص الأخير قبل الامتحان</h2>
+  <p class="sub">أهم 8 جمل إنجليزي تحفظها زي ما هي — غالباً هتحتاج تكتبها حرفياً</p>
+  <div class="grid2">
+    <div class="mini"><h5>1 — Ethics</h5><p>"Engineers shall hold paramount the safety, health and welfare of the public."</p></div>
+    <div class="mini"><h5>2 — Design objective</h5><p>"The primary objective of machine design is synthesis, or creation, not analysis."</p></div>
+    <div class="mini"><h5>3 — Code vs Standard</h5><p>"A code is a set of standards with the force of law behind it."</p></div>
+    <div class="mini"><h5>4 — Yield strength</h5><p>"Permanent set reaches a fixed amount, usually 0.2% of the original gauge length."</p></div>
+    <div class="mini"><h5>5 — True stress</h5><p>"True stress continually increases all the way to fracture."</p></div>
+    <div class="mini"><h5>6 — Principal planes</h5><p>"The principal direction surfaces have zero shear stresses."</p></div>
+    <div class="mini"><h5>7 — Ductile static</h5><p>"Stress concentration effect is commonly ignored for static loads on ductile materials."</p></div>
+    <div class="mini"><h5>8 — Von Mises</h5><p>"σ′ = √(σA² − σAσB + σB²) ≤ Sy/n" — single equivalent stress for the entire stress state.</p></div>
+  </div>
+</div>
+
+<div id="noResult">🔍 لا توجد نتائج مطابقة لبحثك</div>
+
+</main>
+</div>
+
+<button id="topBtn" title="العودة لأعلى">↑</button>
+
+<script>
+(function(){
+  // ---------- progress ----------
+  var KEY='me323_progress_v1';
+  var doneMap={};
+  try{ doneMap=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  var btns=Array.prototype.slice.call(document.querySelectorAll('.done-btn'));
+  var links=Array.prototype.slice.call(document.querySelectorAll('nav.side a'));
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(doneMap));}catch(e){} }
+  function refreshBar(){
+    var total=btns.length, done=0;
+    btns.forEach(function(b){ if(b.classList.contains('checked')) done++; });
+    var pct=total? Math.round(done/total*100):0;
+    document.getElementById('pfill').style.width=pct+'%';
+    document.getElementById('pct').textContent=pct+'%';
+  }
+  function markLesson(id,on){
+    doneMap[id]=on; save();
+    var link=links.find(function(a){return a.dataset.sec===id;});
+    if(link) link.classList.toggle('done',on);
+    refreshBar();
+  }
+  btns.forEach(function(b){
+    var id=b.dataset.lesson;
+    if(doneMap[id]){ b.classList.add('checked'); b.textContent='✓ متذاكَر'; }
+    b.addEventListener('click',function(){
+      var on=!b.classList.contains('checked');
+      b.classList.toggle('checked',on);
+      b.textContent=on?'✓ متذاكَر':'✓ خلّصته';
+      markLesson(id,on);
+    });
+  });
+  refreshBar();
+
+  // ---------- scrollspy ----------
+  var sections=Array.prototype.slice.call(document.querySelectorAll('.lesson'));
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(a){a.classList.remove('active');});
+          var link=links.find(function(a){return a.dataset.sec===en.target.id;});
+          if(link) link.classList.add('active');
+        }
+      });
+    },{rootMargin:'-30% 0px -60% 0px'});
+    sections.forEach(function(s){obs.observe(s);});
+  }
+
+  // ---------- sidebar smooth + close on mobile ----------
+  var side=document.getElementById('sidebar');
+  links.forEach(function(a){
+    a.addEventListener('click',function(){ if(window.innerWidth<=960) side.classList.remove('open'); });
+  });
+  document.getElementById('burger').addEventListener('click',function(){ side.classList.toggle('open'); });
+
+  // ---------- search ----------
+  var input=document.getElementById('search');
+  var noRes=document.getElementById('noResult');
+  input.addEventListener('input',function(){
+    var q=input.value.trim().toLowerCase();
+    var any=false;
+    sections.forEach(function(s){
+      var txt=(s.textContent+' '+(s.dataset.title||'')).toLowerCase();
+      var hit=!q || txt.indexOf(q)!==-1;
+      s.classList.toggle('hidden',!hit);
+      if(hit) any=true;
+    });
+    noRes.style.display=any?'none':'block';
+  });
+
+  // ---------- back to top ----------
+  var topBtn=document.getElementById('topBtn');
+  window.addEventListener('scroll',function(){
+    topBtn.classList.toggle('show',window.scrollY>600);
+  });
+  topBtn.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>
