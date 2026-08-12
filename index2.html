@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شرح شيتات ME323 — الجزء الثاني: Fatigue & Shaft Design</title>
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-sans-arabic@latest/arabic-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-sans-arabic@latest/arabic-500-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-sans-arabic@latest/arabic-700-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-mono@latest/latin-400-normal.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/fontsource/css/ibm-plex-mono@latest/latin-600-normal.css" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b2540; --navy2:#123a63; --ink:#1c2b3a; --muted:#5b6b7c;
+  --teal:#0d9488; --teal-dark:#0f766e;
+  --vio:#7c3aed; --vio-bg:#f5f0ff; --vio-line:#ddd0fb;
+  --org:#ea580c; --org-bg:#fff5ec; --org-line:#f6d9c0;
+  --amber:#f59e0b; --amber-bg:#fff8e6;
+  --green:#16a34a; --green-bg:#ecfdf3; --red:#dc2626;
+  --bg:#f2f5f9; --card:#ffffff; --line:#e3e9f0;
+  --radius:16px; --shadow:0 2px 10px rgba(11,37,64,.06),0 10px 30px rgba(11,37,64,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:2;font-size:16.5px}
+::selection{background:#e0d4fc}
+
+header{position:sticky;top:0;z-index:60;background:linear-gradient(135deg,#1e1b4b 0%,#4c1d95 55%,#7c2d12 120%);color:#fff;box-shadow:0 4px 18px rgba(11,37,64,.35)}
+.hwrap{max-width:1400px;margin:auto;padding:14px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid rgba(255,255,255,.25)}
+.htitle h1{font-size:19px;font-weight:700;line-height:1.4}
+.htitle p{font-size:12.5px;opacity:.85;line-height:1.5}
+.hprogress{margin-inline-start:auto;min-width:210px}
+.hprogress .lbl{font-size:11.5px;opacity:.88;display:flex;justify-content:space-between;margin-bottom:4px}
+.pbar{height:8px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden}
+.pbar>div{height:100%;width:0%;background:linear-gradient(90deg,#c4b5fd,#fdba74);border-radius:99px;transition:width .5s ease}
+#burger{display:none;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:10px;padding:8px 14px;font-family:inherit;font-size:14px;cursor:pointer}
+
+.layout{max-width:1400px;margin:auto;display:grid;grid-template-columns:300px 1fr;gap:26px;padding:26px 22px 90px;align-items:start}
+
+nav.side{position:sticky;top:96px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;max-height:calc(100vh - 120px);overflow:auto}
+.searchbox{position:relative;margin-bottom:14px}
+.searchbox input{width:100%;padding:10px 38px 10px 12px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:13.5px;background:#fafcfe;color:var(--ink)}
+.searchbox input:focus{outline:none;border-color:var(--vio)}
+.searchbox .ic{position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:.5}
+.unit-tag{font-size:12px;font-weight:700;color:#fff;background:var(--vio);border-radius:8px;padding:4px 10px;margin:14px 0 8px;display:inline-block}
+.unit-tag.u4{background:var(--org)}
+nav.side a{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;color:var(--muted);text-decoration:none;font-size:13.5px;transition:.18s;border:1px solid transparent}
+nav.side a:hover{background:#f6f2fe;color:var(--vio)}
+nav.side a.active{background:#f1ebff;color:var(--vio);font-weight:700;border-color:var(--vio-line)}
+nav.side a[data-unit="u4"]:hover{background:#fff4ea;color:var(--org)}
+nav.side a[data-unit="u4"].active{background:#fff1e5;color:var(--org);font-weight:700;border-color:var(--org-line)}
+nav.side a .dot{width:7px;height:7px;border-radius:50%;background:#cfd9e3;flex:none;transition:.2s}
+nav.side a.done .dot{background:var(--green)}
+nav.side a .en-mini{font-family:'IBM Plex Mono',monospace;direction:ltr;font-size:12px}
+
+main{min-width:0}
+.intro-card{background:linear-gradient(135deg,#fff 0%,#f9f5ff 100%);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 28px;margin-bottom:28px}
+.intro-card h2{color:var(--navy);font-size:22px;margin-bottom:8px}
+.intro-card p{color:var(--muted);font-size:15px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:12.5px;background:#f4f0fc;border:1px solid var(--vio-line);padding:4px 12px;border-radius:99px;color:#4c1d95}
+.chip.c2{background:#fff3ea;border-color:var(--org-line);color:#9a3412}
+
+.unit-header{display:flex;align-items:center;gap:14px;margin:44px 0 20px;scroll-margin-top:110px}
+.unit-header .num{width:52px;height:52px;border-radius:14px;background:var(--vio);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;flex:none;box-shadow:var(--shadow)}
+.unit-header.u4 .num{background:var(--org)}
+.unit-header h2{font-size:24px;color:var(--navy)}
+.unit-header small{display:block;font-family:'IBM Plex Mono',monospace;direction:ltr;text-align:right;color:var(--muted);font-size:13px}
+
+.lesson{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:24px;overflow:hidden;scroll-margin-top:110px}
+.lesson.hidden{display:none}
+.lesson-head{padding:20px 24px;display:flex;align-items:flex-start;gap:14px;border-bottom:1px dashed var(--line);background:linear-gradient(180deg,#fbfdfe,#fff)}
+.lesson-head .no{background:#f1ebff;color:var(--vio);font-family:'IBM Plex Mono',monospace;font-weight:600;border-radius:10px;padding:6px 12px;font-size:14px;flex:none;direction:ltr}
+.lesson[data-unit="u4"] .lesson-head .no{background:#fff1e5;color:var(--org)}
+.lesson-head h3{font-size:18.5px;color:var(--navy);line-height:1.6}
+.lesson-head .en-sub{font-family:'IBM Plex Mono',monospace;direction:ltr;display:block;font-size:12.5px;color:var(--vio);margin-top:2px}
+.lesson[data-unit="u4"] .lesson-head .en-sub{color:var(--org)}
+.lesson-head .done-btn{margin-inline-start:auto;flex:none;background:#f4f7fa;border:1.5px solid var(--line);color:var(--muted);border-radius:99px;padding:6px 14px;font-family:inherit;font-size:12.5px;cursor:pointer;transition:.2s;white-space:nowrap}
+.lesson-head .done-btn:hover{border-color:var(--green);color:var(--green)}
+.lesson-head .done-btn.checked{background:var(--green-bg);border-color:var(--green);color:var(--green);font-weight:700}
+.lesson-body{padding:22px 26px 26px}
+.lesson-body p{margin-bottom:12px}
+.lesson-body h4{color:var(--vio);font-size:16px;margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+.lesson[data-unit="u4"] .lesson-body h4{color:var(--org)}
+.lesson-body h4::before{content:'';width:5px;height:20px;background:linear-gradient(180deg,var(--vio),#c4b5fd);border-radius:99px;flex:none}
+.lesson[data-unit="u4"] .lesson-body h4::before{background:linear-gradient(180deg,var(--org),#fdba74)}
+ul.styled{list-style:none;margin:8px 0 14px}
+ul.styled li{padding:7px 0;padding-inline-start:26px;position:relative;border-bottom:1px dashed #eef2f6}
+ul.styled li:last-child{border-bottom:none}
+ul.styled li::before{content:'◂';position:absolute;right:2px;color:var(--vio);font-size:12px;top:11px}
+.lesson[data-unit="u4"] ul.styled li::before{color:var(--org)}
+ul.styled li b{color:var(--navy)}
+ol.styled{margin:8px 22px 14px}
+ol.styled li{padding:5px 0}
+
+.en{font-family:'IBM Plex Mono',monospace;direction:ltr;unicode-bidi:isolate;display:inline-block;background:#fff7e0;border:1px solid #f2d98c;color:#8a5b00;padding:0 7px;border-radius:6px;font-size:.86em;line-height:1.7;white-space:nowrap}
+.en.b{background:#e8f1fb;border-color:#bcd6ef;color:#134e7c;font-weight:600}
+.en.v{background:#f3edff;border-color:#d8c9fb;color:#5b21b6;font-weight:600}
+.en.o{background:#ffefe3;border-color:#f3cdb0;color:#9a3412;font-weight:600}
+
+.formula{direction:ltr;text-align:center;font-family:'IBM Plex Mono',monospace;background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#ede9fe;padding:14px 18px;border-radius:12px;margin:14px auto;font-size:17px;letter-spacing:.5px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),var(--shadow);overflow-x:auto;white-space:nowrap}
+.lesson[data-unit="u4"] .formula{background:linear-gradient(135deg,#431407,#9a3412)}
+.formula sub,.formula sup{font-size:.68em}
+.formula .hl{color:#7ee8d8;font-weight:600}
+.formula .cap{display:block;font-size:11px;color:#c7bfe8;margin-top:6px;font-family:'IBM Plex Sans Arabic';direction:rtl}
+.lesson[data-unit="u4"] .formula .cap{color:#fbd9bc}
+
+.box{border-radius:12px;padding:14px 18px;margin:14px 0;font-size:15px;border:1px solid}
+.box .bt{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.box.exam{background:var(--green-bg);border-color:#b6e6c6}
+.box.exam .bt{color:var(--green)}
+.box.tip{background:var(--amber-bg);border-color:#f0dca0}
+.box.tip .bt{color:#b45309}
+.box.warn{background:#fef2f2;border-color:#fecaca}
+.box.warn .bt{color:var(--red)}
+.box.info{background:#eff6ff;border-color:#bfd7f5}
+.box.info .bt{color:#1d4ed8}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:14px 0}
+.mini{background:#fafcfe;border:1px solid var(--line);border-radius:12px;padding:14px 16px;transition:.2s}
+.mini:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#ddd0fb}
+.mini h5{font-size:14.5px;color:var(--navy);margin-bottom:6px}
+.mini p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.9}
+
+details.fold{border:1px solid var(--line);border-radius:12px;margin:12px 0;background:#fbfdfe;overflow:hidden}
+details.fold summary{cursor:pointer;padding:12px 18px;font-weight:700;color:var(--navy);font-size:15px;list-style:none;display:flex;align-items:center;gap:10px;user-select:none;transition:.2s}
+details.fold summary:hover{background:#f6f2fe}
+details.fold summary::after{content:'▾';margin-inline-start:auto;color:var(--vio);transition:transform .25s;font-size:13px}
+details.fold[open] summary::after{transform:rotate(180deg)}
+details.fold .fc{padding:4px 18px 16px;border-top:1px dashed var(--line)}
+
+.tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px;direction:ltr;text-align:left}
+.tbl th{background:#4c1d95;color:#fff;padding:9px 12px;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px}
+.lesson[data-unit="u4"] .tbl th{background:#9a3412}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--line)}
+.tbl tr:nth-child(even) td{background:#f7fafc}
+.tbl td.ar{direction:rtl;text-align:right;font-family:'IBM Plex Sans Arabic'}
+
+.steps{counter-reset:st;list-style:none;margin:10px 0}
+.steps li{position:relative;padding:8px 46px 8px 0;counter-increment:st}
+.steps li::before{content:counter(st);position:absolute;right:0;top:10px;width:30px;height:30px;border-radius:50%;background:var(--vio);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.lesson[data-unit="u4"] .steps li::before{background:var(--org)}
+
+.final{background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;border-radius:var(--radius);padding:30px;margin-top:40px;box-shadow:var(--shadow)}
+.final h2{font-size:22px;margin-bottom:6px}
+.final p.sub{opacity:.8;font-size:14px;margin-bottom:18px}
+.final .grid2 .mini{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+.final .mini h5{color:#c4b5fd}
+.final .mini p{color:#e4defa}
+
+#topBtn{position:fixed;bottom:26px;left:26px;width:48px;height:48px;border-radius:50%;background:var(--vio);color:#fff;border:none;font-size:20px;cursor:pointer;box-shadow:0 8px 22px rgba(124,58,237,.45);opacity:0;pointer-events:none;transition:.3s;z-index:70}
+#topBtn.show{opacity:1;pointer-events:auto}
+#noResult{display:none;text-align:center;color:var(--muted);padding:40px;font-size:15px}
+
+@media(max-width:960px){
+  .layout{grid-template-columns:1fr;padding:16px 14px 80px}
+  #burger{display:block}
+  nav.side{position:fixed;top:0;right:-320px;width:290px;height:100vh;max-height:none;z-index:80;border-radius:0;transition:right .3s ease;box-shadow:-8px 0 30px rgba(0,0,0,.2)}
+  nav.side.open{right:0}
+  .hprogress{width:100%;min-width:0}
+  .lesson-body{padding:18px 16px 22px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <button id="burger">☰ الفهرس</button>
+    <div class="logo">🛠️</div>
+    <div class="htitle">
+      <h1>شرح شيتات ME323 — الجزء الثاني: Fatigue & Shaft Design</h1>
+      <p>الوحدة 3 (الفشل بالكلل) والوحدة 4 (تصميم الأعمدة) · شرح عربي تفصيلي + الجمل الإنجليزية زي ما هي للامتحان · Dr. Mohamed Osman Abdalla</p>
+    </div>
+    <div class="hprogress">
+      <div class="lbl"><span>تقدّمك في المذاكرة</span><span id="pct">0%</span></div>
+      <div class="pbar"><div id="pfill"></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- ===================== SIDEBAR ===================== -->
+<nav class="side" id="sidebar">
+  <div class="searchbox">
+    <span class="ic">🔍</span>
+    <input type="text" id="search" placeholder="ابحث في الشرح...">
+  </div>
+  <span class="unit-tag">Unit 3 · Fatigue Failure</span>
+  <a href="#u3-intro" data-unit="u3" data-sec="u3-intro"><span class="dot"></span><span class="en-mini">Introduction to Fatigue</span></a>
+  <a href="#u3-stages" data-unit="u3" data-sec="u3-stages"><span class="dot"></span><span class="en-mini">Stages of Fatigue Failure</span></a>
+  <a href="#u3-sn" data-unit="u3" data-sec="u3-sn"><span class="dot"></span><span class="en-mini">S-N Diagram & Endurance Limit</span></a>
+  <a href="#u3-marin" data-unit="u3" data-sec="u3-marin"><span class="dot"></span><span class="en-mini">Marin Factors ka..kf</span></a>
+  <a href="#u3-notch" data-unit="u3" data-sec="u3-notch"><span class="dot"></span><span class="en-mini">Notch Sensitivity</span></a>
+  <a href="#u3-fluct" data-unit="u3" data-sec="u3-fluct"><span class="dot"></span><span class="en-mini">Fluctuating Stresses & Criteria</span></a>
+  <a href="#u3-tors" data-unit="u3" data-sec="u3-tors"><span class="dot"></span><span class="en-mini">Torsional Fatigue + Solved</span></a>
+
+  <span class="unit-tag u4">Unit 4 · Design of Shafts</span>
+  <a href="#u4-intro" data-unit="u4" data-sec="u4-intro"><span class="dot"></span><span class="en-mini">Shaft Introduction & Types</span></a>
+  <a href="#u4-mat" data-unit="u4" data-sec="u4-mat"><span class="dot"></span><span class="en-mini">Shaft Materials</span></a>
+  <a href="#u4-layout" data-unit="u4" data-sec="u4-layout"><span class="dot"></span><span class="en-mini">Shaft Layout Guidelines</span></a>
+  <a href="#u4-stress" data-unit="u4" data-sec="u4-stress"><span class="dot"></span><span class="en-mini">Critical Locations & Stresses</span></a>
+  <a href="#u4-proc" data-unit="u4" data-sec="u4-proc"><span class="dot"></span><span class="en-mini">Initial Design Procedure</span></a>
+  <a href="#u4-de" data-unit="u4" data-sec="u4-de"><span class="dot"></span><span class="en-mini">DE Equations for Diameter</span></a>
+  <a href="#u4-exam" data-unit="u4" data-sec="u4-exam"><span class="dot"></span><span class="en-mini">Solved Exercises</span></a>
+</nav>
+
+<!-- ===================== MAIN ===================== -->
+<main>
+
+<div class="intro-card">
+  <h2>📖 ده الجزء الثاني من سلسلة الشرح</h2>
+  <p>بعد ما ذاكرت Lecture 1 و Unit 2 (في الجزء الأول)، هنا شرح تفصيلي بالعربي للوحدتين الباقيتين: <b>Unit 3 — Fatigue Failure</b> و<b>Unit 4 — Design of Shafts</b>. كل مصطلح أو جملة إنجليزية جاية زي ما هي في الشيت داخل صندوق — احفظها حرفياً عشان تكتبها صح في الامتحان. المعادلات كلها متحقق منها رقمياً، والمسائل المحلولة في الآخر.</p>
+  <div class="chips">
+    <span class="chip">🔁 Unit 3: Fatigue Failure Resulting from Variable Loading</span>
+    <span class="chip c2">⚙️ Unit 4: Design of Shafts</span>
+    <span class="chip">✍️ 9+1 مسائل شيت</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<div class="unit-header" id="u3-start">
+  <div class="num">03</div>
+  <div><h2>الوحدة الثالثة: الفشل بالكلل بسبب التحميل المتغير</h2><small>Unit 3: Fatigue Failure Resulting from Variable Loading</small></div>
+</div>
+
+<!-- ===== 3.1 ===== -->
+<section class="lesson" id="u3-intro" data-unit="u3" data-title="introduction fatigue metals variable loading">
+  <div class="lesson-head">
+    <span class="no">3.1</span>
+    <h3>مقدمة إلى الكلل في المعادن <span class="en-sub">Introduction to Fatigue in Metals</span></h3>
+    <button class="done-btn" data-lesson="u3-intro">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>لحد الوحدة 2 كنا بنتكلم عن أحمال <b>استاتيكية</b> ثابتة. لكن في الواقع معظم الأجزاء بتتحمّل أحمال بتتغير مع الزمن:</p>
+    <ul class="styled">
+      <li>الإجهادات بتتغير مع الوقت أو تتذبذب بين مستويات مختلفة: <span class="en">The stresses vary with time or fluctuate between different levels</span>.</li>
+      <li><b>مثال الشيت:</b> نقطة (ليفة) على سطح عمود دوّار واقع عليه انحناء بتتعرّض لشد ثم ضغط مع <b>كل لفة</b> للعمود: <span class="en">A fiber on the rotating shaft subjected to the action of bending loads undergoes both tension and compression for each revolution of the shaft</span>.</li>
+      <li>يعني التحميل ينتج إجهادات: <b>متغيرة، متكررة، متناوبة، أو متذبذبة</b>: <span class="en">variable, repeated, alternating, or fluctuating</span>.</li>
+    </ul>
+    <h4>طيب إيه هو الفشل بالكلل؟ — Fatigue Failure</h4>
+    <ul class="styled">
+      <li><b>الجملة المحفوظة:</b> الإجهادات القصوى الفعلية بتكون <b>أقل بكثير من إجهاد الخضوع</b>، ومع ذلك الفشل بيحصل بعد دورات إجهاد كثيرة: <span class="en">The actual maximum stresses are well below yield strength, but failure occurs after many stress cycles. This is called fatigue failure</span>.</li>
+      <li>الفشل بالكلل بيكون <b>بكسر نهائي مفاجئ</b>: <span class="en">Fatigue failure is by sudden ultimate fracture</span>.</li>
+      <li><b>الخطورة:</b> لا يوجد أي تحذير مرئي مسبق للفشل: <span class="en">No visible warning in advance of failure is found</span>.</li>
+    </ul>
+    <div class="box warn"><div class="bt">⚠️ ليه الكلل مهم؟</div>لأن الجزء ممكن يفضّل شغال شكله سليم تماماً، وفجأة ينكسر بدون مقدمات — عشان كده تصميم الكلل هو أساس تصميم الأعمدة والسيور والتروس.</div>
+  </div>
+</section>
+
+<!-- ===== 3.2 ===== -->
+<section class="lesson" id="u3-stages" data-unit="u3" data-title="stages fatigue crack beach marks">
+  <div class="lesson-head">
+    <span class="no">3.2</span>
+    <h3>مراحل الفشل بالكلل <span class="en-sub">Stages of Fatigue Failure</span></h3>
+    <button class="done-btn" data-lesson="u3-stages">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>الفشل بالكلل بيمر بـ <b>ثلاث مراحل</b> — سؤال تعدادي شهير:</p>
+    <ol class="steps">
+      <li><span class="en v">Stage I</span> — <b>نشوء شق مجهري</b> نتيجة التشوه اللدن الدوري: <span class="en">Initiation of micro-crack due to cyclic plastic deformation</span>.</li>
+      <li><span class="en v">Stage II</span> — الشق يتطور إلى <b>شق ماكروي</b> يفتح ويقفل بشكل متكرر، مكوّناً خطوطاً تسمى <b>علامات الشاطئ</b>: <span class="en">Progresses to macro-crack that repeatedly opens and closes, creating bands called beach marks</span>.</li>
+      <li><span class="en v">Stage III</span> — الشق ينتشر لدرجة أن المادة المتبقية <b>لا تكفي لحمل الحمل</b>، فيحصل فشل نهائي بسيط: <span class="en">Crack has propagated far enough that remaining material is insufficient to carry the load, and fails by simple ultimate failure</span>.</li>
+    </ol>
+    <div class="grid2">
+      <div class="mini"><h5>🔎 Beach marks</h5><p>خطوط على سطح الكسر بتبيّن مسار انتشار الشق — علامة مميزة لفشل الكلل في الفحص.</p></div>
+      <div class="mini"><h5>📍 Crack initiation</h5><p>الشق يبدأ غالباً عند تركيز إجهاد: مجرى خبطة <span class="en">keyway</span>، حواف حادة، ثقوب تزييت غير متطابقة، علامات ختم <span class="en">stamp marks</span>.</p></div>
+    </div>
+    <p>الشيت بيدي أمثلة واقعية (Fig. 6–3 إلى 6–8): عمود نقل حركة AISI 4320 بدأ الكسر عنده من الـ keyway، وذراع عزم لطائرة أُلغي فيه عيب ثقب التزييت بإعادة التصميم.</p>
+  </div>
+</section>
+
+<!-- ===== 3.3 ===== -->
+<section class="lesson" id="u3-sn" data-unit="u3" data-title="s-n diagram endurance limit fatigue life methods">
+  <div class="lesson-head">
+    <span class="no">3.3</span>
+    <h3>طرق عمر الكلل ومخطط S-N وحد التحمل <span class="en-sub">Fatigue-Life Methods · S-N Diagram · Endurance Limit</span></h3>
+    <button class="done-btn" data-lesson="u3-sn">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <h4>طرق التنبؤ بعمر الكلل — Fatigue-Life Methods</h4>
+    <p>ثلاث طرق رئيسية: <span class="en">Three major fatigue life models</span>:</p>
+    <ul class="styled">
+      <li><span class="en b">1. Stress–life method</span> — طريقة الإجهاد–العمر (اللي بنستخدمها في المقرر).</li>
+      <li><span class="en b">2. Strain–life method</span> — طريقة الانفعال–العمر.</li>
+      <li><span class="en b">3. Linear elastic fracture mechanics method</span> — طريقة ميكانيكا الكسر المرنة الخطية.</li>
+    </ul>
+    <p>الطرق دي تحاول تتنبأ بالعمر بعدد الدورات حتى الفشل <span class="en">N</span> عند مستوى تحميل معين:</p>
+    <ul class="styled">
+      <li><b>كلل منخفض الدورات:</b> <span class="en">low cycle fatigue: N ≤ 10³ cycles</span>.</li>
+      <li><b>كلل مرتفع الدورات:</b> <span class="en">high cycle fatigue: N ≥ 10³ cycles</span>.</li>
+    </ul>
+
+    <h4>مخطط S-N — S-N Diagram</h4>
+    <ul class="styled">
+      <li>بيترسم من اختبارات كلل <b>متناوبة تماماً</b>: <span class="en">plotted from the results of completely reversed axial fatigue tests</span>.</li>
+      <li>عدد الدورات حتى الفشل عند مستويات إجهاد مختلفة بيترسم على <b>مقياس log-log</b>.</li>
+      <li>بالنسبة للصلب، بيظهر <b>«ركبة»</b> قرب <span class="en">10⁶ cycles</span>: <span class="en">For steels, a knee occurs near 10⁶ cycles</span>.</li>
+      <li>الإجهاد المقابل للركبة اسمه <b>حد التحمل</b> أو حد الكلل: <span class="en">Strength corresponding to the knee is called endurance limit S<sub>e</sub> or fatigue limit</span>.</li>
+      <li><b>ملحوظة مهمة:</b> المعادن غير الحديدية (ألومنيوم وسبائكه، نحاس، نحاس أصفر، رصاص، زنك، صلب لا يصدأ) <b>غالباً ليس لها حد تحمل</b>: <span class="en">Nonferrous metals often do not have an endurance limit</span>.</li>
+    </ul>
+
+    <h4>تقدير حد التحمل — The Endurance Limit</h4>
+    <p>التحديد الدقيق بيتم باختبارات كلل (روتينية لكنها طويلة). في تقدير مبسّط لعيّنة <b>الكمرة الدوّارة</b> <span class="en">rotating-beam specimen</span> للصلب، نرمز له بـ <span class="en v">S′<sub>e</sub></span> (بشرطة — للعيّنة المعملية):</p>
+    <div class="formula">S′<sub>e</sub> = 0.5 S<sub>ut</sub> &nbsp;(S<sub>ut</sub> ≤ 1400 MPa)<span class="cap">حد التحمل التقديري للصلب = نص مقاومة الشد</span></div>
+    <ul class="styled">
+      <li><span class="en">S<sub>ut</sub></span> هي <b>أقل مقاومة شد</b> <span class="en">minimum tensile strength</span>.</li>
+      <li><b>فرّق بين الرمزين:</b> الرمز بدون شرطة <span class="en v">S<sub>e</sub></span> محجوز لحد تحمل <b>الجزء الحقيقي</b> في الماكينة تحت أي نوع تحميل: <span class="en">The unprimed symbol S<sub>e</sub> is reserved for the endurance limit of an actual machine element subjected to any kind of loading</span>.</li>
+    </ul>
+    <div class="box tip"><div class="bt">💡 قاعدة الحفظ</div>S′<sub>e</sub> (بشرطة) = المعمل/العيّنة المثالية = 0.5 Sut · S<sub>e</sub> (بدون شرطة) = الجزء الحقيقي بعد التعديلات.</div>
+  </div>
+</section>
+
+<!-- ===== 3.4 ===== -->
+<section class="lesson" id="u3-marin" data-unit="u3" data-title="marin equation factors surface size load temperature reliability">
+  <div class="lesson-head">
+    <span class="no">3.4</span>
+    <h3>معادلة مارين ومعاملات تعديل حد التحمل ⭐ <span class="en-sub">Marin Equation & Endurance Limit Modifying Factors</span></h3>
+    <button class="done-btn" data-lesson="u3-marin">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>ليه بنحتاج تعديل؟ لأن <span class="en">S′<sub>e</sub></span> اتقاست في <b>ظروف معملية مضبوطة بدقة</b>: <span class="en">carefully prepared and tested under closely controlled conditions</span>، ومن غير الواقعي نتوقع أن الجزء الحقيقي يطابق قيم المعمل. اختبار الأجزاء الحقيقية غير عملي، فبنستخدم <b>معاملات مارين</b> لتعديل حد التحمل: <span class="en">a set of Marin factors are used to adjust the endurance limit</span>.</p>
+    <div class="formula">S<sub>e</sub> = k<sub>a</sub> k<sub>b</sub> k<sub>c</sub> k<sub>d</sub> k<sub>e</sub> k<sub>f</sub> · S′<sub>e</sub><span class="cap">معادلة مارين — احفظ ترتيب المعاملات الستة</span></div>
+
+    <div class="grid2">
+      <div class="mini">
+        <h5>k<sub>a</sub> — معامل السطح <span class="en">Surface Factor</span></h5>
+        <p>الإجهادات أعلى ما تكون عند السطح، وجودة تشطيب السطح بتأثر على بدء الشقوق. <span class="en">Surface factor is a function of ultimate strength</span> — وكل ما المادة أقوى، بتبقى <b>أكثر حساسية</b> للأسطح الخشنة.</p>
+      </div>
+      <div class="mini">
+        <h5>k<sub>b</sub> — معامل الحجم <span class="en">Size Factor</span></h5>
+        <p>الأجزاء الأكبر فيها مساحة سطح أكبر عند مستويات إجهاد عالية ← احتمال بدء الشق أعلى. للأحمال المحورية لا يوجد تأثير حجم: <span class="en">For axial load, there is no size effect, so k<sub>b</sub> = 1</span>.</p>
+      </div>
+      <div class="mini">
+        <h5>k<sub>c</sub> — معامل التحميل <span class="en">Loading Factor</span></h5>
+        <p>حد التحمل التقديري معمول من اختبار <b>انحناء متناوب تماماً</b>، فبنعدّله لأنواع التحميل الأخرى.</p>
+      </div>
+      <div class="mini">
+        <h5>k<sub>d</sub> — معامل الحرارة <span class="en">Temperature Factor</span></h5>
+        <p>حد التحمل بيحافظ على نفس علاقته بـ Sut في الحرارات المرتفعة زي حرارة الغرفة (جدول 6–4). لو Sut معروف عند حرارة التشغيل، خليه وخلي kd = 1.</p>
+      </div>
+      <div class="mini">
+        <h5>k<sub>e</sub> — معامل الاعتمادية <span class="en">Reliability Factor</span></h5>
+        <p>S′<sub>e</sub> = 0.5 Sut بتمثل <b>اعتمادية 50%</b>، والمعامل ده بيعدّل لأي اعتمادية مطلوبة من جدول 6–5.</p>
+      </div>
+      <div class="mini">
+        <h5>k<sub>f</sub> — تأثيرات أخرى <span class="en">Miscellaneous-Effects Factor</span></h5>
+        <p>تذكير بأي عوامل تانية: إجهادات متبقية، خصائص اتجاهية من التشكيل على البارد، تقسية سطحية، تآكل، طلاء كهربائي، تردد التحميل الدوري.</p>
+      </div>
+    </div>
+
+    <h4>أهم العلاقات العددية اللي بتيجي في الامتحان</h4>
+    <table class="tbl">
+      <tr><th>Factor</th><th>Condition</th><th>Value</th></tr>
+      <tr><td>k<sub>b</sub></td><td>d ≤ 8 mm (bending/torsion)</td><td>1</td></tr>
+      <tr><td>k<sub>b</sub></td><td>8 &lt; d ≤ 250 mm (round rotating)</td><td>1.24 d<sup>−0.107</sup></td></tr>
+      <tr><td>k<sub>b</sub></td><td>Axial loading</td><td>1</td></tr>
+      <tr><td>k<sub>c</sub></td><td>Bending</td><td>1</td></tr>
+      <tr><td>k<sub>c</sub></td><td>Axial</td><td>0.85</td></tr>
+      <tr><td>k<sub>c</sub></td><td>Torsion</td><td>0.59</td></tr>
+      <tr><td>k<sub>e</sub></td><td>Reliability 50% / 90% / 99%</td><td>1.00 / 0.897 / 0.814</td></tr>
+    </table>
+
+    <h4>الحجم للأشكال غير الدائرية — Equivalent Diameter</h4>
+    <ul class="styled">
+      <li>للأجزاء غير الدوّارة أو غير الدائرية بنحسب <b>قطراً دائرياً مكافئاً</b> بمساواة حجم المادة المعرض لإجهاد ≥ 95% من الإجهاد الأقصى: <span class="en">equating the volume of material stressed at and above 95% of the maximum stress</span>.</li>
+      <li>للمستطيل <span class="en">h × b</span>: <span class="en">A<sub>95</sub> = 0.05 hb</span>.</li>
+    </ul>
+    <div class="box exam"><div class="bt">🎯 للامتحان</div>لو معطى «bending + قطر 20 mm» → kb = 1.24(20)^−0.107 ≈ 0.90 · لو «axial load» → kb = 1 مهما كان القطر · لو «torsion» → kc = 0.59. التلات قيم دول أكثر حاجة بتتكرر.</div>
+  </div>
+</section>
+
+<!-- ===== 3.5 ===== -->
+<section class="lesson" id="u3-notch" data-unit="u3" data-title="stress concentration notch sensitivity kf q">
+  <div class="lesson-head">
+    <span class="no">3.5</span>
+    <h3>تركيز الإجهاد وحساسية الثلمة <span class="en-sub">Stress Concentration & Notch Sensitivity</span></h3>
+    <button class="done-btn" data-lesson="u3-notch">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <ul class="styled">
+      <li><b>في التحميل الديناميكي لا بد من تطبيق تأثيرات تركيز الإجهاد:</b> <span class="en">For dynamic loading, stress concentration effects must be applied</span>.</li>
+      <li>نحصل على <span class="en">K<sub>t</sub></span> كالعادة من الأشكال (مثل Appendix A–15).</li>
+      <li>لكن في الكلل، بعض المواد <b>لا تكون حساسة كلياً</b> لـ Kt، فبنستخدم قيمة مخفَّضة: <span class="en">For fatigue, some materials are not fully sensitive to K<sub>t</sub> so a reduced value can be used</span>.</li>
+    </ul>
+    <h4>التعريفات — احفظ الاثنين دول مع بعض</h4>
+    <ul class="styled">
+      <li><span class="en v">K<sub>f</sub></span> = <b>معامل تركيز إجهاد الكلل</b>: <span class="en">the fatigue stress-concentration factor</span>.</li>
+      <li><span class="en v">q</span> = <b>حساسية الثلمة</b>، مداها من 0 (غير حساس) إلى 1 (حساس كلياً): <span class="en">notch sensitivity, ranging from 0 (not sensitive) to 1 (fully sensitive)</span>.</li>
+    </ul>
+    <div class="formula">K<sub>f</sub> = 1 + q(K<sub>t</sub> − 1) &nbsp;&nbsp;,&nbsp;&nbsp; K<sub>fs</sub> = 1 + q<sub>s</sub>(K<sub>ts</sub> − 1)<span class="cap">الانحناء/المحوري · اللي (القص) — q من Fig. 6–20 و qs من Fig. 6–21</span></div>
+    <ul class="styled">
+      <li>لو <span class="en">q = 0</span> ← <span class="en">K<sub>f</sub> = 1</span> (لا تأثير للثلمة).</li>
+      <li>لو <span class="en">q = 1</span> ← <span class="en">K<sub>f</sub> = K<sub>t</sub></span> (حساسية كاملة).</li>
+    </ul>
+    <div class="box info"><div class="bt">ℹ️ الحديد الزهر — Cast Irons</div><span class="en">Cast irons are already full of discontinuities, which are included in the strengths</span> — يعني الثلمات الإضافية ما بتضرش كتير، والمُوصى به: <span class="en">Recommended to use q = 0.2 for cast irons</span>.</div>
+  </div>
+</section>
+
+<!-- ===== 3.6 ===== -->
+<section class="lesson" id="u3-fluct" data-unit="u3" data-title="fluctuating stresses mean alternating soderberg goodman gerber">
+  <div class="lesson-head">
+    <span class="no">3.6</span>
+    <h3>الإجهادات المتذبذبة ومعايير الفشل ⭐ <span class="en-sub">Fluctuating Stresses & Failure Criteria</span></h3>
+    <button class="done-btn" data-lesson="u3-fluct">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>الإجهادات المتذبذبة ممكن توصفها ببساطة بـ <b>أقل وأقصى إجهاد</b> <span class="en">σ<sub>min</sub> and σ<sub>max</sub></span>، وبنعرّف:</p>
+    <ul class="styled">
+      <li><span class="en v">σ<sub>m</sub></span> = المركبة المتوسطة الثابتة من الإجهاد: <span class="en">midrange steady component of stress (sometimes called mean stress)</span>.</li>
+      <li><span class="en v">σ<sub>a</sub></span> = سعة المركبة المتناوبة: <span class="en">amplitude of alternating component of stress</span>.</li>
+    </ul>
+    <div class="formula">σ<sub>m</sub> = (σ<sub>max</sub> + σ<sub>min</sub>)/2 &nbsp;&nbsp;,&nbsp;&nbsp; σ<sub>a</sub> = (σ<sub>max</sub> − σ<sub>min</sub>)/2<span class="cap">المتوسط = نص المجموع · السعة = نص الفرق</span></div>
+    <div class="formula">R = σ<sub>min</sub>/σ<sub>max</sub> &nbsp;(stress ratio) &nbsp;&nbsp;,&nbsp;&nbsp; A = σ<sub>a</sub>/σ<sub>m</sub> &nbsp;(amplitude ratio)<span class="cap">نسبة الإجهاد ونسبة السعة</span></div>
+
+    <h4>ثلاث حالات خاصة لازم تميزهم</h4>
+    <div class="grid2">
+      <div class="mini"><h5>Completely Reversed — متناوب تماماً</h5><p>الإجهاد بين +σ و −σ · <b>σm = 0</b> و σa = σ. ده اللي بيحصل في نقطة على عمود دوّار تحت انحناء.</p></div>
+      <div class="mini"><h5>Repeated — متكرر</h5><p>الإجهاد من صفر إلى قيمة قصوى · <b>σmin = 0</b> → σm = σa = σmax/2.</p></div>
+      <div class="mini"><h5>General Fluctuating — متذبذب عام</h5><p>بين أي قيمتين σmin و σmax — نطلّع منها σm و σa بالمعادلتين فوق.</p></div>
+    </div>
+
+    <h4>معادلات معايير الفشل المستخدمة — Failure Criteria Equations</h4>
+    <p>الفكرة: بتقاطع خط تحميل ثابت الميل <span class="en">constant slope load line</span> مع كل معيار فشل بنحصل على معادلات التصميم، و <span class="en">n</span> هو معامل التصميم لعمر لانهائي: <span class="en">design factor or factor of safety for infinite fatigue life</span>.</p>
+    <table class="tbl">
+      <tr><th>Criterion</th><th>Equation</th><th class="ar">ملاحظات</th></tr>
+      <tr><td>Soderberg</td><td>σa/Se + σm/Sy = 1/n</td><td class="ar">أكثر تحفظاً — بيستخدم Sy</td></tr>
+      <tr><td>Modified Goodman</td><td>σa/Se + σm/Sut = 1/n</td><td class="ar">الأشهر — بيستخدم Sut</td></tr>
+      <tr><td>Gerber</td><td>nσa/Se + (nσm/Sut)² = 1</td><td class="ar">قطع مكافئ — أقل تحفظاً</td></tr>
+      <tr><td>ASME-Elliptic</td><td>(nσa/Se)² + (nσm/Sy)² = 1</td><td class="ar">قطع ناقص</td></tr>
+    </table>
+    <div class="box tip"><div class="bt">💡 ترتيب التحفظ</div>Soderberg (الأكثر تحفظاً، أقل قطر آمن) ← Goodman ← ASME Elliptic ← Gerber (الأقل تحفظاً). لو الامتحان طلب مقارنة: Soderberg بيدي أكبر قطر لأنه بيستخدم Sy &lt; Sut.</div>
+  </div>
+</section>
+
+<!-- ===== 3.7 ===== -->
+<section class="lesson" id="u3-tors" data-unit="u3" data-title="torsional fatigue strength exercise soderberg">
+  <div class="lesson-head">
+    <span class="no">3.7</span>
+    <h3>قوة الكلل في اللي + مسألة الشيت المحلولة <span class="en-sub">Torsional Fatigue Strength & Solved Exercise</span></h3>
+    <button class="done-btn" data-lesson="u3-tors">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <h4>ملاحظات اللي في الكلل — Torsional Fatigue</h4>
+    <ul class="styled">
+      <li>الاختبارات وجدت أن <b>المركبة الثابتة من الإجهاد ليس لها تأثير</b> على حد التحمل في اللي — بشرط أن المادة مطيلية، مصقولة، بدون ثلمات، وأسطوانية: <span class="en">the steady-stress component has no effect on the endurance limit for torsional loading if the material is ductile, polished, notch-free, and cylindrical</span>.</li>
+      <li>لكن للأسطح الأقل من المثالية، خط <b>Goodman المعدَّل أكثر منطقية</b>: <span class="en">for less than perfect surfaces, the modified Goodman line is more reasonable</span>.</li>
+      <li>لحالات اللي الخالص، استخدم <span class="en">k<sub>c</sub> = 0.59</span> لتحويل حد التحمل العمودي إلى حد تحمل قص.</li>
+      <li>لمقاومة القص النهائية، المُوصى به: <span class="en">S<sub>su</sub> ≈ 0.67 S<sub>ut</sub></span>.</li>
+    </ul>
+
+    <h4>✍️ مسألة الشيت — Exercise</h4>
+    <div class="box info"><div class="bt">📋 المعطيات</div><span class="en">σmax = 200 MPa ; σmin = −100 MPa ; Sut = 700 MPa ; Sy = 400 MPa ; Se = 200 MPa</span> — المطلوب: معامل الأمان بمعيار <b>Soderberg</b>.</div>
+    <ol class="steps">
+      <li>نحسب السعة والمتوسط:<br>
+      <span class="en">σa = (200 − (−100))/2 = 150 MPa</span><br>
+      <span class="en">σm = (200 + (−100))/2 = 50 MPa</span></li>
+      <li>نطبّق معادلة Soderberg: <span class="en">σa/Se + σm/Sy = 1/n</span><br>
+      <span class="en">150/200 + 50/400 = 0.75 + 0.125 = 0.875</span></li>
+      <li>إذن: <span class="en">n = 1/0.875 ≈ 1.14</span></li>
+    </ol>
+    <div class="box exam"><div class="bt">🎯 الإجابة النموذجية</div><span class="en">Factor of safety n ≈ 1.14 (Soderberg)</span>. لو حليت نفس المسألة بـ Goodman هتطلع <span class="en">n = 1/(150/200 + 50/700) ≈ 1.22</span> — لو الامتحان طلب مقارنة اكتب الحلّين.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<div class="unit-header u4" id="u4-start">
+  <div class="num">04</div>
+  <div><h2>الوحدة الرابعة: تصميم الأعمدة</h2><small>Unit 4: Design of Shafts — ME323 Engineering Design I</small></div>
+</div>
+
+<!-- ===== 4.1 ===== -->
+<section class="lesson" id="u4-intro" data-unit="u4" data-title="shaft introduction types line spindle stub counter flexible">
+  <div class="lesson-head">
+    <span class="no">4.1</span>
+    <h3>مقدمة وأنواع الأعمدة <span class="en-sub">SHAFT Introduction & Types</span></h3>
+    <button class="done-btn" data-lesson="u4-intro">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <h4>التعريف</h4>
+    <ul class="styled">
+      <li>العمود <b>عضو دوّار ينقل القدرة</b>: <span class="en">A shaft is a rotating member which transmits power</span>.</li>
+      <li>من أكثر عناصر الماكينات الأساسية شيوعاً، يُستخدم بطرق متنوعة في كل أنواع المعدات الميكانيكية. أمثلة: <span class="en">Power shaft, Line shaft, Cam shaft</span>.</li>
+    </ul>
+    <ul class="styled">
+      <li>أعمدة القدرة والخطوط مصممة لنقل القدرة <b>وحمل العناصر الدوّارة</b> مثل البكرات والتروس والعجلات الطائرة: <span class="en">pulley</span>, <span class="en">gears</span>, <span class="en">flywheels</span> — والعناصر دي بتنتج <b>عزم انحناء بالإضافة إلى عزم اللي</b>: <span class="en">bending moment in addition to torque</span>.</li>
+      <li><b>الشرط المزدوج:</b> العمود لازم يكون <b>قوياً</b> بما يكفي للإجهادات الاستاتيكية والديناميكية، و<b>صلباً (جاسئاً)</b> بما يكفي لمنع الانحرافات الضارة في اللي والجانبية: <span class="en">A shaft must not only be strong enough to sustain static and dynamic stresses but also be sufficiently rigid to prevent harmful torsional and lateral deflections</span>.</li>
+    </ul>
+
+    <h4>أنواع الأعمدة — سؤال تعدادي جاهز</h4>
+    <table class="tbl">
+      <tr><th>Type</th><th>Definition (as in handout)</th></tr>
+      <tr><td>Line shaft</td><td>A shaft used to transmit power to several machines<br><span class="ar">عمود ينقل القدرة لعدة ماكينات</span></td></tr>
+      <tr><td>Spindle</td><td>A short shaft. Ex. Head stock spindle<br><span class="ar">عمود قصير، مثل عمود رأس المخرطة</span></td></tr>
+      <tr><td>Stub shaft</td><td>A shaft that is integral with an engine, motor or prime mover<br><span class="ar">عمود متكامل مع المحرك أو مصدر الحركة</span></td></tr>
+      <tr><td>Counter shaft</td><td>A short shaft that connects a prime mover to a line shaft or a machine<br><span class="ar">عمود قصير يربط مصدر الحركة بعمود خط أو ماكينة</span></td></tr>
+      <tr><td>Flexible shaft</td><td>Permits transmission of motion between two points where rotational axes are at angle with respect to each other — power transmission is relatively small<br><span class="ar">عمود مرن ينقل الحركة بين محورين متقابلين بزاوية — قدرته صغيرة نسبياً</span></td></tr>
+    </table>
+
+    <div class="box tip"><div class="bt">💡 Know it — نقطة فهم محورية</div>
+    <ul class="styled" style="margin:4px 0 0">
+      <li><b>الانحراف</b> يتحكم فيه أساساً <b>الشكل الهندسي</b> وليس المادة: <span class="en">Deflection primarily controlled by geometry, not material</span>.</li>
+      <li><b>الإجهاد</b> يتحكم فيه الشكل الهندسي وليس المادة: <span class="en">Stress controlled by geometry, not material</span>.</li>
+      <li><b>القوة/المتانة</b> تتحكم فيها <b>خواص المادة</b>: <span class="en">Strength controlled by material property</span>.</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- ===== 4.2 ===== -->
+<section class="lesson" id="u4-mat" data-unit="u4" data-title="shaft materials steel cold drawn hot rolled alloy">
+  <div class="lesson-head">
+    <span class="no">4.2</span>
+    <h3>مواد الأعمدة <span class="en-sub">Shaft Materials</span></h3>
+    <button class="done-btn" data-lesson="u4-mat">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <ul class="styled">
+      <li>الأعمدة تُصنع عادة من <b>صلب منخفض الكربون (0.1 – 0.35%)</b> مسحوب على البارد أو مدرفل على الساخن، مثل: <span class="en">low carbon (0.1 – 0.35%), cold drawn or hot rolled steel, such as ANSI 1020–1050 steels</span>.</li>
+      <li>عمود الصلب المسحوب على البارد <b>أقوى نسبياً</b> من المدرفل على الساخن، لكن العيب أنه <b>لا يبقى مستقيماً بدقة</b>، والألياف قرب السطح الخارجي تظل تحت إجهاد: <span class="en">the shaft does not remain precisely straight and the fibers near the outer surface remain under stress</span>.</li>
+    </ul>
+    <h4>قواعد اختيار المادة حسب الحجم والخدمة</h4>
+    <ul class="styled">
+      <li>الصلب المسحوب على البارد <b>Cold drawn</b> نموذجي للأقطار الأصغر: <span class="en">typical for d &lt; 3 in. or &lt; 75 mm</span>.</li>
+      <li>المدرفل على الساخن <b>HR steel</b> شائع للمقاسات الأكبر: <span class="en">common for larger sizes (≥ 75 mm)</span>.</li>
+      <li>العمود المدرفل على الساخن لازم <b>يتشغّل كاملاً على الماكينة</b> لإزالة القشرة منزوعة الكربون: <span class="en">Shaft must be machined all over to remove all of the decarburized scale caused by hot rolling</span>.</li>
+      <li>للماكينات <b>عالية السرعة</b> التي تحتاج متانة ومقاومة صدمات وقوة أكبر ← <b>صلب سبائكي</b>: <span class="en">alloy steel</span>، مثل: <span class="en">AISI 1340-50, 3140-50, 4140, 4340, 5140 and 8650</span>.</li>
+      <li>لأعمدة المجاري (Splines) المعرضة لصدمات شديدة ← يُوصى تحديداً بـ: <span class="en">oil quenched SAE 3245 steel is particularly recommended</span>.</li>
+    </ul>
+    <div class="box exam"><div class="bt">🎯 للامتحان</div>سؤال «اختار المادة»: قطر صغير + خدمة عادية → <b>1020–1050 cold drawn</b> · قطر كبير → <b>HR + تشغيل كامل</b> · سرعات عالية/صدمات → <b>alloy steel 4140/4340</b> · spline بصدمات شديدة → <b>SAE 3245 oil quenched</b>.</div>
+  </div>
+</section>
+
+<!-- ===== 4.3 ===== -->
+<section class="lesson" id="u4-layout" data-unit="u4" data-title="shaft layout guidelines axial loads torque keys assembly">
+  <div class="lesson-head">
+    <span class="no">4.3</span>
+    <h3>تخطيط العمود وأربع إرشاداته ⭐ <span class="en-sub">Shaft Layout & Design Guidelines</span></h3>
+    <button class="done-btn" data-lesson="u4-layout">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <ul class="styled">
+      <li>التخطيط العام للعمود لاستيعاب عناصره (تروس، رومان بلي، بكرات) <b>لازم يتحدد مبكراً</b> عشان نعمل تحليل جسم حر ونحصل على مخططات القص والعزم: <span class="en">must be specified early in the design process in order to perform a free body force analysis and to obtain shear-moment diagrams</span>.</li>
+      <li>شكل العمود عادة <b>أسطوانة مدرّجة</b>: <span class="en">The geometry of a shaft is generally that of a stepped cylinder</span>.</li>
+      <li>استخدام <b>الكتف</b> <span class="en">shaft shoulder</span> وسيلة ممتازة لتحديد موضع العناصر محورياً وحمل أحمال الدفع: <span class="en">an excellent means of axially locating the shaft elements and to carry any thrust loads</span>.</li>
+      <li>غالباً التصميم يكون مجرد <b>تعديل لنماذج موجودة</b> مع تغييرات محدودة: <span class="en">a revision of existing models in which a limited number of changes must be made</span>.</li>
+    </ul>
+    <p><b>لا توجد قواعد مطلقة</b> لتحديد التخطيط، لكن في أربع إرشادات مفيدة — <b>احفظ أسماءهم الأربعة</b>: <span class="en">Axial layout of components – Supporting axial loads – Providing for torque transmission – Assembly and Disassembly</span>.</p>
+
+    <h4>① التموضع المحوري للمكونات — Axial Layout of Components</h4>
+    <ul class="styled">
+      <li>الموضع المحوري غالباً يفرضه تصميم العلبة وباقي المكونات المتعاشقة.</li>
+      <li><b>الأفضل:</b> دعم المكونات الحاملة للحمل <b>بين الرومانات</b> وليس معلّقة خارجها: <span class="en">it is best to support load-carrying components between bearings rather than cantilevered outboard of the bearings</span>.</li>
+      <li>البكرات وعجلات السلاسل غالباً لازم تركّب خارجياً لسهولة تركيب السير أو الجنزير — وفي الحالة دي <b>خلي طول الكابولي قصيراً</b> لتقليل الانحراف: <span class="en">The length of the cantilever should be kept short to minimize the deflection</span>.</li>
+      <li><b>غالباً رومانان فقط:</b> <span class="en">Only two bearings should be used in most cases</span> — ولو العمود طويل جداً ومحمّل بعدة عناصر ممكن أكثر، مع <b>اهتمام خاص بمحاذاة الرومانات</b>: <span class="en">particular care must be given to the alignment of the bearings</span>.</li>
+      <li><b>الأعمدة قصيرة:</b> لتقليل عزوم الانحناء والانحرافات: <span class="en">Shafts should be kept short to minimize bending moments and deflections</span>.</li>
+      <li>سيب <b>مسافة محورية بين المكونات</b> للسماح بسريان التزييت ولدخول أداة الفك (البلّاية): <span class="en">to allow for lubricant flow and to provide access space for disassembly of components with a puller</span>.</li>
+      <li><b>قرّب المكونات الحاملة للحمل من الرومانات</b> لتقليل عزم الانحناء عند أماكن تركيز الإجهاد وتقليل الانحراف.</li>
+      <li>الوسيلة الأساسية لتحديد الموضع: <b>الارتكاز على كتف العمود</b> <span class="en">position them against a shoulder of the shaft</span> — والكتف كمان بيعطي دعماً صلباً يقلل الانحراف والاهتزاز.</li>
+      <li>عند القوى المنخفضة ممكن بدلاً من الكتف: حلقات تثبيت في مجاري <span class="en">retaining rings in grooves</span>، جلبة بين المكونات <span class="en">sleeves</span>، أو أطواق تثبيت <span class="en">clamp-on collars</span>.</li>
+    </ul>
+
+    <h4>② دعم الأحمال المحورية — Supporting Axial Loads</h4>
+    <ul class="styled">
+      <li>عند أحمال محورية كبيرة لازم نوفر وسيلة لنقل الحمل المحوري إلى العمود ثم عبر الرومان إلى الأرض: <span class="en">transfer the axial loads into the shaft, then through a bearing to the ground</span>.</li>
+      <li>ده ضروري خصوصاً مع <b>التروس الحلزونية والمخروطية ورومانات البكر المدببة</b>، لأن كل واحدة منها بتنتج مركبات قوة محورية: <span class="en">helical or bevel gears, or tapered roller bearings, as each of these produces axial force components</span>.</li>
+      <li><b>الأفضل: رومان واحد فقط</b> هو اللي يشيل الحمل المحوري إلى الكتف: <span class="en">Generally best for only one bearing to carry axial load to shoulder</span>.</li>
+    </ul>
+
+    <h4>③ توفير نقل العزم — Providing for Torque Transmission</h4>
+    <p>الوسائل الشائعة لنقل العزم إلى العمود: <span class="en">Keys – Splines – Setscrews – Pins – Press or shrink fits – Tapered fits</span></p>
+    <ul class="styled">
+      <li><b>الخبوطات (Keys) من أكثر الوسائل فعالية</b>: <span class="en">Keys are one of the most effective</span> لأن:</li>
+      <li><span class="en">Slip fit of component onto shaft for easy assembly</span> — تركيب سهل بمقاس خلوص.</li>
+      <li><span class="en">Positive angular orientation of component</span> — تحديد زاوي موجب للمكون.</li>
+      <li><span class="en">Can design key to be weakest link to fail in case of overload</span> — ممكن نصمم الخبوطة لتكون «أضعف حلقة» فتفشل هي وتحمي باقي النظام عند الحمل الزائد.</li>
+    </ul>
+
+    <h4>④ التجميع والفك — Assembly and Disassembly</h4>
+    <ul class="styled">
+      <li>لازم نفكر في طريقة تجميع المكونات على العمود، وتجميع العمود نفسه في الهيكل: <span class="en">the method of assembling the components onto the shaft, and the shaft assembly into the frame</span>.</li>
+      <li>ده عادة يتطلب <b>أكبر قطر في نص العمود</b>، وأقطار تصغر تدريجياً نحو الطرفين عشان المكونات تقدر تنزلق من الأطراف: <span class="en">the largest diameter in the center of the shaft, with progressively smaller diameters towards the ends to allow components to be slide on from the ends</span>.</li>
+      <li>لو مطلوب كتف على جانبي مكون، أحدهما لازم يتعمل بحلقة تثبيت أو جلبة بين مكونين.</li>
+      <li>علبة التروس نفسها لازم يكون فيها وسيلة لتركيب العمود في روماناته والرومانات في الهيكل.</li>
+    </ul>
+    <div class="box exam"><div class="bt">🎯 للامتحان</div>سؤال «اذكر إرشادات تخطيط العمود» → اكتب الأربع عناوين بالإنجليزي واشرح سطرين لكل واحد. وسؤال «ليه نستخدم خبوطة؟» → الثلاث نقاط: slip fit + positive angular orientation + weakest link.</div>
+  </div>
+</section>
+
+<!-- ===== 4.4 ===== -->
+<section class="lesson" id="u4-stress" data-unit="u4" data-title="shaft design stress critical locations alternating midrange">
+  <div class="lesson-head">
+    <span class="no">4.4</span>
+    <h3>المواقع الحرجة والإجهادات المتناوبة والمتوسطة <span class="en-sub">Shaft Design for Stress — Critical Locations</span></h3>
+    <button class="done-btn" data-lesson="u4-stress">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>بنحسب الإجهادات <b>فقط عند المواقع الحرجة</b>: <span class="en">Stresses are only evaluated at critical locations</span>. والمواقع الحرجة عادة تكون:</p>
+    <ul class="styled">
+      <li>على <b>السطح الخارجي</b>: <span class="en">On the outer surface</span>.</li>
+      <li>عند المواقع المحورية التي يكون فيها <b>عزم الانحناء كبيراً</b>: <span class="en">At axial locations where the bending moment is large</span>.</li>
+      <li>حيث يوجد <b>عزم لي</b>: <span class="en">Where the torque is present</span>.</li>
+      <li>حيث توجد <b>تركيزات إجهاد</b>: <span class="en">Where stress concentrations exist</span>.</li>
+    </ul>
+    <p>بمقارنة مباشرة بين النقاط المختلفة على طول العمود بنقدر نحدد <b>عدداً قليلاً من المواقع الحرجة</b> نبني عليها التصميم.</p>
+
+    <h4>المركبات المتناوبة والمتوسطة</h4>
+    <ul class="styled">
+      <li>إجهادات الانحناء واللي والمحوري ممكن تكون موجودة بمركباتها <b>المتوسطة والمتناوبة</b> معاً: <span class="en">Bending, torsion and axial stresses may be present in both midrange and alternating components</span>.</li>
+      <li>الأحمال المحورية عادة صغيرة وثابتة، فلذلك <b>بتُهمَل</b> في هذا الباب: <span class="en">Axial loads are generally small and constant, so will be ignored in this section</span>.</li>
+    </ul>
+    <p>التعريفات: <span class="en">M<sub>a</sub></span> و <span class="en">M<sub>m</sub></span> = العزم المتناوب والمتوسط · <span class="en">T<sub>a</sub></span> و <span class="en">T<sub>m</sub></span> = عزم اللي المتناوب والمتوسط · <span class="en">I</span> عزم القصور · <span class="en">J</span> عزم القصور القطبي · <span class="en">c</span> المسافة العمودية للمحور المحايد. وتذكّر معادلة الانحناء: <span class="en">M/I = σ/c = E/R</span>.</p>
+
+    <h4>للعمود الدائري — أهم علاقتين في الوحدة</h4>
+    <div class="formula">I = πd<sup>4</sup>/64 &nbsp;&nbsp;,&nbsp;&nbsp; J = πd<sup>4</sup>/32<span class="cap">عزم القصور وعزم القصور القطبي للقطاع الدائري (J = 2I)</span></div>
+    <p>وبالتالي الإجهادات على السطح (c = d/2): <span class="en">σ = 32M/(πd³)</span> للانحناء و <span class="en">τ = 16T/(πd³)</span> للي.</p>
+    <p>الشيت بيوفر جداول لقيم <span class="en">K<sub>t</sub></span> و <span class="en">K<sub>ts</sub></span> و <span class="en">q</span> و <span class="en">q<sub>shear</sub></span> جاهزة للاستخدام في الحسابات.</p>
+    <div class="box info"><div class="bt">ℹ️ ليه العمود الدوّار إجهاد انحناءه متناوب تماماً؟</div>لأن النقطة على سطح العمود بتعد من شد إلى ضغط كل لفة (راجع Unit 3) — فبنبسّط بـ <span class="en">M<sub>m</sub> = 0</span> و <span class="en">T<sub>a</sub> = 0</span> لو الانحناء ثابت واللي ثابت على عمود دوّار: <span class="en">the bending stress is completely reversed and torsion is steady</span>.</div>
+  </div>
+</section>
+
+<!-- ===== 4.5 ===== -->
+<section class="lesson" id="u4-proc" data-unit="u4" data-title="initial design procedure assumptions n D/d r/d">
+  <div class="lesson-head">
+    <span class="no">4.5</span>
+    <h3>خطوات التصميم الأولي للعمود ⭐ <span class="en-sub">Shaft Design for Stress — Procedure (Initial Design)</span></h3>
+    <button class="done-btn" data-lesson="u4-proc">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <p>دي أهم نقطة إجرائية في الوحدة — لو جالك «صمم عمود» بدون بيانات كاملة، امشي بالخطوات دي بالترتيب:</p>
+    <ol class="steps">
+      <li><b>افترض أن</b> <span class="en">k<sub>f</sub> = k<sub>t</sub></span> و <span class="en">k<sub>fs</sub> = k<sub>ts</sub></span> (أي حساسية كاملة q = 1).</li>
+      <li><b>افترض</b> معامل تصميم <span class="en">n = 1.5</span>، ونسبة <span class="en">D/d = 1.2</span>، ونسبة <span class="en">r/d = 0.1</span>.</li>
+      <li><b>افترض نصف قطر استدارة سخي</b> لو غير معطى، واستخدم <b>جدول 7-1</b> لقيم Kt و Kts الأولية: <span class="en">Assume generous fillet radius if not given and then use Table 7-1 for initial values of K<sub>t</sub> and K<sub>ts</sub></span>.</li>
+      <li><b>اختر مادة رخيصة</b> لو غير معطاة واعرف <span class="en">S<sub>ut</sub></span> و <span class="en">S<sub>y</sub></span> بتاعتها.</li>
+      <li><b>احسب k<sub>a</sub></b>، وافترض <span class="en">k<sub>b</sub> = 0.9</span> (لأن القطر d لسه مش معروف)، وخذ <span class="en">k<sub>c</sub> = k<sub>d</sub> = k<sub>e</sub> = k<sub>f</sub> = 1</span> لو غير معطاة.</li>
+      <li><b>احسب حد التحمل:</b> <span class="en">S<sub>e</sub> = k<sub>a</sub>k<sub>b</sub>k<sub>c</sub>k<sub>d</sub>k<sub>e</sub>k<sub>f</sub> · S′<sub>e</sub></span>.</li>
+      <li><b>استخدم معادلة DE-Goodman أو Soderberg</b> لإيجاد القطر d.</li>
+      <li><b>اختر المقاس القياسي</b> من <b>جدول A-17</b>: <span class="en">Select the standard size from Table A-17</span>.</li>
+    </ol>
+    <div class="box tip"><div class="bt">💡 ملاحظات على الخطوات</div>القيمة النموذجية لنسبة الكتف عند الدعم: <span class="en">The typical D/d ratio for support at a shoulder is 1.2</span> · في التصميم الأولي افترض n (ممكن 1.5) ثم راجعها لاحقاً بالمعادلة 7-7.</div>
+    <div class="box exam"><div class="bt">🎯 سؤال محتمل</div>«اذكر افتراضات التصميم الأولي لعمود» → اكتب: kf=kt · kfs=kts · n=1.5 · D/d=1.2 · r/d=0.1 · kb=0.9 · kc=kd=ke=kf=1 · مادة رخيصة + جدول 7-1 + جدول A-17.</div>
+  </div>
+</section>
+
+<!-- ===== 4.6 ===== -->
+<section class="lesson" id="u4-de" data-unit="u4" data-title="DE Goodman Soderberg Gerber ASME elliptic diameter equations von Mises">
+  <div class="lesson-head">
+    <span class="no">4.6</span>
+    <h3>معادلات DE لإيجاد قطر العمود ⭐ <span class="en-sub">Von Mises + Fatigue Criteria → Diameter Equations</span></h3>
+    <button class="done-btn" data-lesson="u4-de">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+    <h4>الفكرة العامة</h4>
+    <ol class="steps">
+      <li>نجمع الإجهادات في <b>إجهادات فون ميسس</b>: <span class="en">Combine stresses into von Mises stresses</span> (مركبة متناوبة σ′a ومركبة متوسطة σ′m).</li>
+      <li>نعوّض إجهادات فون ميسس في معادلة معيار الفشل المختار (مثل خط Goodman المعدَّل): <span class="en">Substitute von Mises stresses into failure criteria equation</span>.</li>
+      <li>نحل المعادلة في d — <span class="en">Solving for d is convenient for design purposes</span>.</li>
+    </ol>
+
+    <h4>تجميع الكمّتين A و B</h4>
+    <p>لكل موقع حرج بنحسب كميتين مجمّعتين (بالمتر·نيوتن أو N·mm — اوحّد الوحدات!):</p>
+    <div class="formula">A = √[ 4(K<sub>f</sub>M<sub>a</sub>)² + 3(K<sub>fs</sub>T<sub>a</sub>)² ] &nbsp;&nbsp;,&nbsp;&nbsp; B = √[ 4(K<sub>f</sub>M<sub>m</sub>)² + 3(K<sub>fs</sub>T<sub>m</sub>)² ]<span class="cap">A للمركبات المتناوبة · B للمركبات المتوسطة</span></div>
+
+    <h4>المعادلات الأربع لحساب القطر — احفظهم!</h4>
+    <div class="formula">DE–Goodman: &nbsp; d = [ (16n/π) · ( A/S<sub>e</sub> + B/S<sub>ut</sub> ) ]<sup>1/3</sup><span class="cap">المعادلة 7-8 — الأكثر استخداماً</span></div>
+    <div class="formula">DE–Soderberg: &nbsp; d = [ (16n/π) · ( A/S<sub>e</sub> + B/S<sub>y</sub> ) ]<sup>1/3</sup><span class="cap">المعادلة 7-12 — نفس الشكل لكن بـ Sy بدل Sut</span></div>
+    <div class="formula">DE–ASME Elliptic: &nbsp; d = [ (16n/π) · √( (A/S<sub>e</sub>)² + (B/S<sub>y</sub>)² ) ]<sup>1/3</sup><span class="cap">قطع ناقص — جذر مجموع المربعين</span></div>
+    <div class="formula">DE–Gerber: &nbsp; d = { (8nA/(πS<sub>e</sub>)) · [ 1 + √( 1 + (2S<sub>e</sub>B/(S<sub>ut</sub>A))² ) ] }<sup>1/3</sup><span class="cap">المعادلة 7-10 — قطع مكافئ</span></div>
+
+    <h4>التبسيط الشهير للعمود الدوّار — Know it</h4>
+    <p>لعمود دوّار بانحناء ولي ثابتين: الانحناء <b>متناوب تماماً</b> واللي <b>ثابت</b>، فبنحط <span class="en">M<sub>m</sub> = 0</span> و <span class="en">T<sub>a</sub> = 0</span> في المعادلات 7-7 إلى 7-14 — وببساطة بتسقط بعض الحدود: <span class="en">equations 7-7 through 7-14 can be simplified by setting M<sub>m</sub> = 0 and T<sub>a</sub> = 0, which simply drops out some of the terms</span>. يعني: <span class="en">A = 2K<sub>f</sub>M<sub>a</sub></span> و <span class="en">B = √3 · K<sub>fs</sub>T<sub>m</sub></span>.</p>
+    <div class="box exam"><div class="bt">🎯 خطوات أي مسألة تصميم عمود</div>
+    ① طلّع Ma, Ta, Mm, Tm من المعطيات (لو اتقالت «عمود دوّار» → Mm=0 و Ta=0) · ② حدد Kf و Kfs (أو افترضهم = Kt و Kts) · ③ احسب A و B · ④ طبّق معادلة المعيار المطلوب بالوحدات المتسقة (N·mm مع MPa) · ⑤ اطلع d واختار مقاس قياسي من Table A-17.</div>
+  </div>
+</section>
+
+<!-- ===== 4.7 ===== -->
+<section class="lesson" id="u4-exam" data-unit="u4" data-title="solved exercises shaft diameter goodman soderberg">
+  <div class="lesson-head">
+    <span class="no">4.7</span>
+    <h3>مسائل الشيت المحلولة — تدريب الامتحان <span class="en-sub">Exercises 1–9 from the Handout</span></h3>
+    <button class="done-btn" data-lesson="u4-exam">✓ خلّصته</button>
+  </div>
+  <div class="lesson-body">
+
+    <h4>✍️ Exercise 1 — DE-Soderberg (معطى إجابته في الشيت: d = 27.7 mm)</h4>
+    <div class="box info"><div class="bt">📋 المعطيات</div><span class="en">Ma = 70 Nm · Ta = 45 Nm · Mm = 55 Nm · Tm = 35 Nm · Sut = 700 MPa · Sy = 560 MPa · Se = 210 MPa · Kf = 2.2 · Kfs = 1.8 · n = 2.0</span></div>
+    <ol class="steps">
+      <li><span class="en">A = √[4(2.2×70)² + 3(1.8×45)²] = √[4(154)² + 3(81)²] = √114547 ≈ 338.4 Nm</span></li>
+      <li><span class="en">B = √[4(2.2×55)² + 3(1.8×35)²] = √[4(121)² + 3(63)²] = √70471 ≈ 265.5 Nm</span></li>
+      <li>Soderberg: <span class="en">d³ = (16×2/π)·(338.4/210×10⁶ + 265.5/560×10⁶)</span><br><span class="en">= 10.186 × 2.086×10⁻⁶ = 2.125×10⁻⁵ m³</span></li>
+      <li><span class="en">d = (2.125×10⁻⁵)^(1/3) = 0.0277 m = 27.7 mm ✓</span> — زي إجابة الشيت بالظبط.</li>
+    </ol>
+
+    <h4>✍️ Exercise 2 — نفس المعطيات لكن DE-Goodman</h4>
+    <p>الفرق الوحيد: المقام الثاني يبقى <b>Sut بدل Sy</b>:</p>
+    <div class="formula" dir="ltr">d³ = (16×2/π)·(A/Se + B/Sut) = 10.186×(338.4/210e6 + 265.5/700e6) → d ≈ 27.3 mm</div>
+    <div class="box exam"><div class="bt">🎯 المقارنة</div>Soderberg ادى <b>27.7 mm</b> و Goodman ادى <b>27.3 mm</b> — Soderberg أكبر لأنه أكثر تحفظاً (Sy &lt; Sut). دي جملة المقارنة الجاهزة لأي سؤال «Compare Goodman vs Soderberg».</div>
+
+    <h4>✍️ Exercise 3 — DE-modified Goodman</h4>
+    <p>عمود AISI 1020CD: <span class="en">Ma = 100 Nm · Tm = 110 Nm</span> (يعني Ta = Mm = 0)، Sut = 700، Sy = 560، Se = 210 MPa.</p>
+    <div class="box tip"><div class="bt">💡 بما أن n و Kf غير معطاة</div>بنمشي على إجراء التصميم الأولي: <span class="en">n = 1.5</span> ونفترض <span class="en">Kf = Kfs = 1</span> مبدئياً.</div>
+    <div class="formula" dir="ltr">A = 2(1)(100) = 200 Nm · B = √3(1)(110) = 190.5 Nm<br>d³ = (16×1.5/π)·(200/210e6 + 190.5/700e6) → d ≈ 21.1 mm</div>
+
+    <h4>✍️ Exercise 4 — عزم ولي متغير بين قيم سالبة وموجبة</h4>
+    <p><span class="en">Sut = 600, Sy = 450 MPa</span> · الانحناء من 200 إلى 400 Nm → <span class="en">Mm = 300, Ma = 100 Nm</span> · اللي من −100 إلى 250 Nm → <span class="en">Tm = (250−100)/2 = 75, Ta = (250+100)/2 = 175 Nm</span>.</p>
+    <div class="box tip"><div class="bt">💡 الفكرة التعليمية</div>اللي بيسالب! لما التحميل يمتد تحت الصفر: المتوسط = نص المجموع والسعة = نص الفرق — خد بالك من الإشارات.</div>
+    <div class="formula" dir="ltr">A = √[4(100)² + 3(175)²] = 363.1 Nm · B = √[4(300)² + 3(75)²] = 613.9 Nm<br>بفرض Se = 0.5·Sut = 300 MPa و n = 1.5 و Kf = Kfs = 1:<br>d³ = (16×1.5/π)·(363.1/300e6 + 613.9/600e6) → d ≈ 25.7 mm</div>
+
+    <h4>✍️ Exercise 5 + 6 — كتف بنسب هندسية محددة</h4>
+    <p>المعطى: <span class="en">d = 0.7D</span> و <span class="en">r = D/20</span>، مادة SAE 2340 معالجة حرارياً: <span class="en">Sut = 1226 MPa, Sy = 1130 MPa</span> وصلادة برينل لا تقل عن 370. عند الكتف: انحناء متناوب تماماً <span class="en">Ma = 70 Nm</span> ولي ثابت <span class="en">Tm = 45 Nm</span>، ومعامل تصميم <span class="en">n = 2.5</span> بمعيار Soderberg.</p>
+    <ol class="steps">
+      <li>من النسب: <span class="en">D/d = 1.43</span> و <span class="en">r/d = 0.05</span> ← نطلع <span class="en">K<sub>t</sub></span> و <span class="en">K<sub>ts</sub></span> من جدول 7-1 / الأشكال.</li>
+      <li>نحسب <span class="en">q</span> من منحنى الحساسية حسب الصلادة (HB ≥ 370) ونصف القطر، ثم <span class="en">K<sub>f</sub> = 1 + q(K<sub>t</sub>−1)</span>.</li>
+      <li>نحسب <span class="en">S<sub>e</sub></span> بمعادلة مارين (ka من السطح المشغّل، kb حسب القطر، kc=1 للي... الخ).</li>
+      <li>لأن الانحناء متناوب تماماً واللي ثابت: <span class="en">M<sub>m</sub> = 0, T<sub>a</sub> = 0</span> → <span class="en">A = 2K<sub>f</sub>M<sub>a</sub></span> و <span class="en">B = √3·K<sub>fs</sub>T<sub>m</sub></span>.</li>
+      <li>نطبّق DE-Soderberg: <span class="en">d = [(16n/π)(A/S<sub>e</sub> + B/S<sub>y</sub>)]^(1/3)</span> ونراجع النسب الهندسية مرة تانية.</li>
+    </ol>
+
+    <h4>✍️ Exercise 7 — مقارنة Goodman و Soderberg</h4>
+    <p><span class="en">Ma = 468 Nm, Tm = 360 Nm</span> (Ta = Mm = 0) — نفس خطوات Exercise 3، والهدف هو <b>المقارنة</b>: حل مرتين مرة بـ Sut ومرة بـ Sy في المقام الثاني، واعرض إن Soderberg بيدي قطر أكبر.</p>
+
+    <h4>✍️ Exercise 8 — عمود بقدرة منقولة وحمل مركزي</h4>
+    <p>عمود 1020CD ينقل <span class="en">20 kW</span> عند <span class="en">200 rpm</span>، ويحمل حملاً مركزياً 900 N مدعوماً ببساطة بين رومانين المسافة بينهما 2.5 m. المعطى <span class="en">Sut = 470 MPa</span> و E = 205 GPa — المطلوب التصميم بـ DE-Goodman مع <b>رسم مخطط العزم لإيجاد Ma</b>.</p>
+    <ol class="steps">
+      <li>عزم اللي من القدرة: <span class="en">T = 60P/(2πN) = 60×20000/(2π×200) ≈ 955 Nm</span> — ده <b>Tm</b> (لي ثابت).</li>
+      <li>أقصى عزم انحناء لحمل مركزي على كمرة مدعومة ببساطة: <span class="en">M<sub>max</sub> = WL/4 = 900×2.5/4 = 562.5 Nm</span> — لعمود دوّار ده <b>Ma</b> (انحناء متناوب تماماً).</li>
+      <li><span class="en">S′<sub>e</sub> = 0.5×470 = 235 MPa</span>، ثم طبّق معاملات مارين المتاحة.</li>
+      <li><span class="en">A = 2K<sub>f</sub>(562.5) , B = √3·K<sub>fs</sub>(955)</span> ثم معادلة DE-Goodman. (بفرض Kf=Kfs=1 و n=1.5 و Se=Se′: الناتج التقريبي d ≈ 40 mm — عدّل حسب معاملاتك الفعلية).</li>
+    </ol>
+
+    <h4>✍️ Exercise 9 — كتف مشغّل مع اعتمادية 99%</h4>
+    <p><span class="en">Ma = 142.4 Nm</span> (انحناء عند الكتف) و<span class="en">Tm = 124.3 Nm</span> ثابت، <span class="en">Sut = 735 MPa, Sy = 574 MPa</span>، وهدف الاعتمادية 0.99، مع ملاحظة الشيت: <span class="en">M<sub>m</sub> = T<sub>a</sub> = 0</span>.</p>
+    <ol class="steps">
+      <li><span class="en">S′<sub>e</sub> = 0.5×735 = 367.5 MPa</span>.</li>
+      <li>للاعتمادية 99% نستخدم <span class="en">k<sub>e</sub> = 0.814</span> (جدول 6-5).</li>
+      <li>نحسب ka (سطح مشغّل machined) و kb و Kf عند الكتف ونكوّن Se.</li>
+      <li><span class="en">A = 2K<sub>f</sub>(142.4)</span> و <span class="en">B = √3·K<sub>fs</sub>(124.3)</span> ثم أي معيار كلل (Goodman مثلاً) لإيجاد d.</li>
+    </ol>
+
+    <details class="fold">
+      <summary>🧪 اختبر نفسك سريعاً (اضغط لعرض الأسئلة)</summary>
+      <div class="fc">
+        <ul class="styled">
+          <li>List the three <b>stages of fatigue failure</b>.</li>
+          <li>What is the difference between <b>S′e and Se</b>? And what is the endurance limit estimate for steels?</li>
+          <li>Write the <b>Marin equation</b> and name all six factors.</li>
+          <li>Write <b>Kf</b> in terms of q and Kt. What q is recommended for cast irons?</li>
+          <li>Write the <b>Soderberg</b> and <b>modified Goodman</b> equations.</li>
+          <li>List the four <b>shaft layout guidelines</b>.</li>
+          <li>What are the <b>initial design assumptions</b> for a shaft?</li>
+          <li>Write the <b>DE-Goodman diameter equation</b> and define A and B.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ===== FINAL SUMMARY ===== -->
+<div class="final" id="final-summary">
+  <h2>📌 الملخص الأخير قبل الامتحان — الجزء الثاني</h2>
+  <p class="sub">أهم الجمل والمعادلات اللي تحفظها حرفياً من الوحدتين 3 و 4</p>
+  <div class="grid2">
+    <div class="mini"><h5>1 — Fatigue definition</h5><p>"The actual maximum stresses are well below yield strength, but failure occurs after many stress cycles. No visible warning in advance of failure is found."</p></div>
+    <div class="mini"><h5>2 — Stages</h5><p>Stage I: micro-crack initiation · Stage II: macro-crack with beach marks · Stage III: simple ultimate failure.</p></div>
+    <div class="mini"><h5>3 — Endurance limit</h5><p>"S′e = 0.5 Sut" for steels; knee near 10⁶ cycles; nonferrous metals often do not have an endurance limit.</p></div>
+    <div class="mini"><h5>4 — Marin</h5><p>"Se = ka·kb·kc·kd·ke·kf·S′e" — kc: bending 1, axial 0.85, torsion 0.59.</p></div>
+    <div class="mini"><h5>5 — Notch sensitivity</h5><p>"Kf = 1 + q(Kt − 1)" — q = 0 → Kf = 1 · q = 1 → Kf = Kt · cast irons q = 0.2.</p></div>
+    <div class="mini"><h5>6 — Fluctuating stresses</h5><p>"σm = (σmax+σmin)/2 · σa = (σmax−σmin)/2" — Soderberg: σa/Se + σm/Sy = 1/n.</p></div>
+    <div class="mini"><h5>7 — Shaft know-it</h5><p>"Deflection & stress controlled by geometry, not material. Strength controlled by material property."</p></div>
+    <div class="mini"><h5>8 — Layout guidelines</h5><p>"Axial layout of components – Supporting axial loads – Providing for torque transmission – Assembly and Disassembly."</p></div>
+    <div class="mini"><h5>9 — Initial design</h5><p>"kf = kt · kfs = kts · n = 1.5 · D/d = 1.2 · r/d = 0.1 · kb = 0.9" — standard size from Table A-17.</p></div>
+    <div class="mini"><h5>10 — Diameter equation</h5><p>"d = [(16n/π)(A/Se + B/Sut)]^⅓" DE-Goodman — A للمتناوب، B للمتوسط، وبالسودربرج Sut تتبدل بـ Sy.</p></div>
+  </div>
+</div>
+
+<div id="noResult">🔍 لا توجد نتائج مطابقة لبحثك</div>
+
+</main>
+</div>
+
+<button id="topBtn" title="العودة لأعلى">↑</button>
+
+<script>
+(function(){
+  var KEY='me323_part2_progress_v1';
+  var doneMap={};
+  try{ doneMap=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  var btns=Array.prototype.slice.call(document.querySelectorAll('.done-btn'));
+  var links=Array.prototype.slice.call(document.querySelectorAll('nav.side a'));
+  function save(){ try{localStorage.setItem(KEY,JSON.stringify(doneMap));}catch(e){} }
+  function refreshBar(){
+    var total=btns.length, done=0;
+    btns.forEach(function(b){ if(b.classList.contains('checked')) done++; });
+    var pct=total? Math.round(done/total*100):0;
+    document.getElementById('pfill').style.width=pct+'%';
+    document.getElementById('pct').textContent=pct+'%';
+  }
+  function markLesson(id,on){
+    doneMap[id]=on; save();
+    var link=links.find(function(a){return a.dataset.sec===id;});
+    if(link) link.classList.toggle('done',on);
+    refreshBar();
+  }
+  btns.forEach(function(b){
+    var id=b.dataset.lesson;
+    if(doneMap[id]){ b.classList.add('checked'); b.textContent='✓ متذاكَر'; }
+    b.addEventListener('click',function(){
+      var on=!b.classList.contains('checked');
+      b.classList.toggle('checked',on);
+      b.textContent=on?'✓ متذاكَر':'✓ خلّصته';
+      markLesson(id,on);
+    });
+  });
+  refreshBar();
+
+  var sections=Array.prototype.slice.call(document.querySelectorAll('.lesson'));
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(a){a.classList.remove('active');});
+          var link=links.find(function(a){return a.dataset.sec===en.target.id;});
+          if(link) link.classList.add('active');
+        }
+      });
+    },{rootMargin:'-30% 0px -60% 0px'});
+    sections.forEach(function(s){obs.observe(s);});
+  }
+
+  var side=document.getElementById('sidebar');
+  links.forEach(function(a){
+    a.addEventListener('click',function(){ if(window.innerWidth<=960) side.classList.remove('open'); });
+  });
+  document.getElementById('burger').addEventListener('click',function(){ side.classList.toggle('open'); });
+
+  var input=document.getElementById('search');
+  var noRes=document.getElementById('noResult');
+  input.addEventListener('input',function(){
+    var q=input.value.trim().toLowerCase();
+    var any=false;
+    sections.forEach(function(s){
+      var txt=(s.textContent+' '+(s.dataset.title||'')).toLowerCase();
+      var hit=!q || txt.indexOf(q)!==-1;
+      s.classList.toggle('hidden',!hit);
+      if(hit) any=true;
+    });
+    noRes.style.display=any?'none':'block';
+  });
+
+  var topBtn=document.getElementById('topBtn');
+  window.addEventListener('scroll',function(){
+    topBtn.classList.toggle('show',window.scrollY>600);
+  });
+  topBtn.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+</body>
+</html>
